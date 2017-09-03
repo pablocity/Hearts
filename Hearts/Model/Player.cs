@@ -12,6 +12,23 @@ namespace Hearts.Model
         public List<Card> hand;
         public Card selectedCard;
 
+        private List<Card> garbage;
+
+
+        private int points;
+        public int Points
+        {
+            get
+            {
+                foreach (Card card in garbage)
+                {
+                    points += card.Points;
+                }
+
+                return points;
+            }
+        }
+
         public Player(string name)
         {
             hand = new List<Card>();

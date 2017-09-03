@@ -19,9 +19,6 @@ namespace Hearts.Model
                 for (int j = 0; j < Enum.GetNames(typeof(Suits)).Length; j++)
                 {
                     Card cardToAdd = new Card((Suits)j, (Values)i);
-
-                    cardToAdd.Replaceable = CheckIfReplaceable(cardToAdd);
-
                     cards.Add(cardToAdd);
                 }
             }
@@ -32,16 +29,7 @@ namespace Hearts.Model
             cards = cardsToAdd;
         }
 
-        public bool CheckIfReplaceable(Card cardToReplace)
-        {
-            if (cardToReplace.Suit == Suits.Hearts || (cardToReplace.Suit == Suits.Clubs && cardToReplace.Value == Values.Two)
-                || (cardToReplace.Suit == Suits.Spades && cardToReplace.Value == Values.Queen))
-            {
-                return false;
-            }
-            else
-                return true;
-        }
+        
 
         public List<Card> Shuffle()
         {

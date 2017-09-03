@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\Deck.cs" />
+    <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

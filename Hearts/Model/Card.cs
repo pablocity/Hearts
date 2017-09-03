@@ -36,6 +36,8 @@ namespace Hearts.Model
         public Suits Suit;
         public Values Value;
 
+        public int Points;
+
         public string Name;
 
         public bool Replaceable;
@@ -48,6 +50,31 @@ namespace Hearts.Model
 
             Name = String.Format("{0} of {1}", value, suit);
             Replaceable = isReplaceable;
+
+            Replaceable = CheckIfReplaceable(this);
+            Points = CalculatePoints(this);
+
+        }
+
+        public static int CalculatePoints(Card card)
+        {
+            if (card.Suit == Suits.Hearts)
+                return 1;
+            else if (card.Suit == Suits.Spades && card.Value == Values.Queen)
+                return 13;
+            else
+                return 0;
+        }
+
+        public static bool CheckIfReplaceable(Card cardToReplace)
+        {
+            if (cardToReplace.Suit == Suits.Hearts || (cardToReplace.Suit == Suits.Clubs && cardToReplace.Value == Values.Two)
+                || (cardToReplace.Suit == Suits.Spades && cardToReplace.Value == Values.Queen))
+            {
+                return false;
+            }
+            else
+                return true;
         }
 
         public override string ToString()
