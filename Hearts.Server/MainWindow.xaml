@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hearts.Server"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Server - Hearts Card Game" Height="375" Width="345">
     <Grid>
-        
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="10,22,0,0" TextWrapping="Wrap" Text="Server adress" VerticalAlignment="Top" Width="109"/>
+        <TextBox HorizontalAlignment="Left" Height="269" Margin="10,68,0,0" TextWrapping="Wrap" Text="Server messages" VerticalAlignment="Top" Width="179" IsReadOnly="True" TextChanged="TextBox_TextChanged"/>
+        <Button Content="Start server" FontFamily="Courier New" FontSize="15" HorizontalAlignment="Left" Margin="194,22,0,0" VerticalAlignment="Top" Width="133" Height="25"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="124,22,0,0" TextWrapping="Wrap" Text="Port num" VerticalAlignment="Top" Width="65"/>
+        <ListView HorizontalAlignment="Left" Height="238" Margin="194,97,0,0" VerticalAlignment="Top" Width="133">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Gracze" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="194,66,0,0" VerticalAlignment="Top" Width="133"/>
+
     </Grid>
 </Window>

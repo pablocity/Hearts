@@ -31,21 +31,18 @@ namespace Hearts.Model
 
         
 
-        public List<Card> Shuffle()
+        public void Shuffle(Random random)
         {
             List<Card> temporaryCards = new List<Card>();
 
             while (cards.Count > 0)
             {
-                int index = MathUtility.Random(0, cards.Count);
-                Card card = cards[index];
+                int index = random.Next(0, cards.Count);
+                temporaryCards.Add(cards[index]);
                 cards.RemoveAt(index);
-                temporaryCards.Add(card);
             }
 
             cards = temporaryCards;
-
-            return temporaryCards;
         }
     }
 }

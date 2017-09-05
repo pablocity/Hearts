@@ -79,7 +79,7 @@ namespace Hearts.Model
 
         public override string ToString()
         {
-            return String.Format("{0} replaceable: {1}", Name, Replaceable);
+            return String.Format("{0} replaceable: {1}, points: {2}", Name, Replaceable, Points);
         }
     }
 }

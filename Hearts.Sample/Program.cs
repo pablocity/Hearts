@@ -13,9 +13,9 @@ namespace Hearts.Sample
         {
             Deck deck = new Deck();
 
-            //deck.Shuffle();
+            deck.Shuffle(new Random());
 
-            foreach (Card card in deck.Shuffle())
+            foreach (Card card in deck.cards)
             {
                 Console.WriteLine(card.ToString());
             }

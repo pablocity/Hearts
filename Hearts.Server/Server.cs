@@ -53,6 +53,9 @@ namespace Hearts.Server
 
                         clients.Add(handler);
                     }
+
+                    await StartGameAsync();
+
                 });
 
             }
@@ -63,7 +66,7 @@ namespace Hearts.Server
 
         }
 
-        public void StartGameAsync()
+        public async Task StartGameAsync()
         {
 
         }
