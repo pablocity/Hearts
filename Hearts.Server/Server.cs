@@ -73,7 +73,7 @@ namespace Hearts.Server
 
         private void Error(string errorMessage)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

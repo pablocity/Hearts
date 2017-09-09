@@ -54,7 +54,7 @@ namespace Hearts.Server
                         {
                             try
                             {
-                                JToken.Parse(clientMsg);
+                                JToken.Parse(clientMsg); // if string isn't JSON throws an exception
                                 response = JsonConvert.DeserializeObject<Message>(clientMsg);
 
                                 endFlag = (response.Request == messageObject.Request);
@@ -72,7 +72,7 @@ namespace Hearts.Server
 
         public void NotifyClient(string error)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
