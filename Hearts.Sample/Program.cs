@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Hearts.Model;
+using System.IO;
 
 namespace Hearts.Sample
 {
@@ -13,11 +14,29 @@ namespace Hearts.Sample
         {
             Deck deck = new Deck();
 
-            deck.Shuffle(new Random());
+            //deck.Shuffle(new Random());
 
-            foreach (Card card in deck.cards)
+            string[] files = Directory.GetFiles(@"C:\Users\Paweł\Desktop\Hearts");
+            List<FileInfo> fileList = Directory.GetFiles(@"C:\Users\Paweł\Desktop\Hearts").Select(f => new FileInfo(f)).OrderBy(f => f.LastWriteTime).ToList();
+            int i = 0;
+
+            for (int a = 0; a < 4; a++)
             {
-                Console.WriteLine(card.ToString());
+                fileList.RemoveAt(0);
+                
+            }
+
+            foreach (FileInfo file in fileList)
+            {
+
+                File.Move(file.FullName, $@"C:\Users\Paweł\Desktop\Hearts\{deck.cards[i].Name}.png");
+                i++;
+            }
+
+
+            foreach (FileInfo s in Directory.GetFiles(@"C:\Users\Paweł\Desktop\Hearts").Select(f => new FileInfo(f)).OrderBy(f => f.LastWriteTime))
+            {
+                Console.WriteLine(s.Name);
             }
 
             Console.ReadKey();

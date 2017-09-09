@@ -18,8 +18,11 @@ namespace Hearts.Model
             {
                 for (int j = 0; j < Enum.GetNames(typeof(Suits)).Length; j++)
                 {
-                    Card cardToAdd = new Card((Suits)j, (Values)i);
-                    cards.Add(cardToAdd);
+                    if ((Values)i != Values.Ten)
+                    {
+                        Card cardToAdd = new Card((Suits)j, (Values)i);
+                        cards.Add(cardToAdd);
+                    }
                 }
             }
         }

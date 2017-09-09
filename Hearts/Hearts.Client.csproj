@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -117,5 +118,161 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Ace of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ace of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ace of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ace of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eight of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eight of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eight of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Eight of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Five of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Five of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Five of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Five of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Four of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Four of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Four of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Four of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Jack of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Jack of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Jack of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Jack of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\King of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\King of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\King of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\King of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nine of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nine of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nine of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nine of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Queen of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Queen of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Queen of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Queen of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Seven of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Seven of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Seven of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Seven of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Six of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Six of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Six of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Six of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ten of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ten of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ten of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ten of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Three of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Three of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Three of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Three of Spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Two of Clubs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Two of Diamonds.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Two of Hearts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Two of Spades.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,8 +11,22 @@ namespace Hearts.Server.ViewModels
 {
     public class MainViewViewModel : ViewModelBase
     {
-        public ObservableCollection<string> messages;
-        public RelayCommand startClick;
+
+        private ObservableCollection<string> messages;
+        public ObservableCollection<string> Messages
+        {
+            get
+            {
+                return messages;
+            }
+
+            set
+            {
+                messages = value;
+                RaisePropertyChanged(() => Messages);
+            }
+        }
+        public RelayCommand StartClick { get; private set; }
 
         private string ipAdress;
         public string IPAdress
@@ -44,11 +58,11 @@ namespace Hearts.Server.ViewModels
 
         public MainViewViewModel()
         {
+            IPAdress = "127.0.0.1";
+            PortNumber = 8080;
             server = new Server();
             messages = new ObservableCollection<string>();
-            startClick = new RelayCommand(startServer);
-
-
+            StartClick = new RelayCommand(startServer);
         }
 
         private void startServer()
@@ -57,6 +71,8 @@ namespace Hearts.Server.ViewModels
                 server = new Server();
 
             server.StartServerAsync(IPAdress, PortNumber);
+
+            Messages.Add($"Server has started succesfully\n IP: {IPAdress} port number {PortNumber}");
         }
     }
 }

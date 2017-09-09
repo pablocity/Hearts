@@ -9,6 +9,6 @@ namespace Hearts.Server
 {
     public class ViewModelLocator
     {
-        public static MainViewViewModel mainViewModel = new MainViewViewModel();
+        public static MainViewViewModel mainViewModel { get; private set; } = new MainViewViewModel();
     }
 }

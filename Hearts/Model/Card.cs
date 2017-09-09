@@ -8,10 +8,10 @@ namespace Hearts.Model
 {
     public enum Suits
     {
-        Spades,
         Clubs,
         Diamonds,
-        Hearts
+        Hearts,
+        Spades
     }
 
     public enum Values
