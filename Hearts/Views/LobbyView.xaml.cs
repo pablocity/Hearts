@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Hearts.Model;
 
 namespace Hearts.Views
 {
@@ -19,9 +20,18 @@ namespace Hearts.Views
     /// </summary>
     public partial class LobbyView : Window
     {
+        Client client;
         public LobbyView()
         {
             InitializeComponent();
+            client = new Client();
+            IP.Text = "127.0.0.1";
+            Port.Text = "8080";
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            await client.ConnectAsync(IP.Text, int.Parse(Port.Text));
         }
     }
 }

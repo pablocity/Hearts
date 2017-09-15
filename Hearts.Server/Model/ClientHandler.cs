@@ -23,6 +23,10 @@ namespace Hearts.Server
         {
             this.client = client;
             Name = name;
+
+            //TEST PURPOSE DOWN HERE
+            //CAN BE OPTIMISED - params doesn't have to be cards array, suits and values are sufficient
+            SendData(new Message(MessageType.CardRequest, new Card(Suits.Clubs, Values.Ace)));
         }
 
         public async void SendData(Message messageObject)
@@ -57,7 +61,7 @@ namespace Hearts.Server
                                 JToken.Parse(clientMsg); // if string isn't JSON throws an exception
                                 response = JsonConvert.DeserializeObject<Message>(clientMsg);
 
-                                endFlag = (response.Request == messageObject.Request);
+                                endFlag = (response.Request == messageObject.Request); //Checks if response message type is the same as it was in sent data
                             }
                             catch (Exception ex)
                             {
@@ -65,6 +69,8 @@ namespace Hearts.Server
                             }
                         }
                     }
+
+                    //process response message
                 }
             });
 

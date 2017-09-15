@@ -54,7 +54,7 @@ namespace Hearts.Server
                         clients.Add(handler);
                     }
 
-                    await StartGameAsync();
+                    StartGameAsync();
 
                 });
 
@@ -66,9 +66,9 @@ namespace Hearts.Server
 
         }
 
-        public async Task StartGameAsync()
+        public void StartGameAsync()
         {
-
+            Error("Game started but not implemented!");
         }
 
         private void Error(string errorMessage)

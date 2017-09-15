@@ -9,6 +9,7 @@ namespace Hearts.ViewModels
 {
     public class LobbyViewModel : ViewModelBase
     {
-
+        //TODO everything, for test purposes lobby is just a simple way to connect to server
+        // it will be much more complex later, for now it's non sense to use MVVM here
     }
 }
