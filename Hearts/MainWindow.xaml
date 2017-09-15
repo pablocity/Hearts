@@ -5,20 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hearts"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="551.355">
     <Grid>
-        <ListView HorizontalAlignment="Left" Height="79" Margin="10,231,0,0" VerticalAlignment="Top" Width="497">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+        <ListView Background="LightGray" x:Name="handCards" Margin="10,206,10,10" Height="Auto" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="150" VerticalAlignment="Center" Width="85"/>
+
+                        </StackPanel>
+                    </Grid>
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
 
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"></StackPanel>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
+
         </ListView>
 
     </Grid>

@@ -13,7 +13,7 @@ namespace Hearts.Model
         public Card selectedCard;
 
         private List<Card> garbage;
-
+        //TODO finish token, wysyłany jako messagae object w celu powiadmoienia serwera o zakończeniu pojedynczego zleconego zadania
 
         private int points;
         public int Points

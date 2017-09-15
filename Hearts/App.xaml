@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Hearts"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <BitmapImage DecodePixelWidth="55" DecodePixelHeight="80" x:Key="card" UriSource="/Resources/Two of Diamonds.png"></BitmapImage>
+        <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
     </Application.Resources>
 </Application>

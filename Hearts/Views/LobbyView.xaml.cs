@@ -10,29 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Hearts.Model;
-using System.Drawing;
-using System.Resources;
-using System.Reflection;
 
-namespace Hearts
+namespace Hearts.Views
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Logika interakcji dla klasy LobbyView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LobbyView : Window
     {
-        public Deck deck;
-        
-        public MainWindow()
+        public LobbyView()
         {
             InitializeComponent();
-
-            deck = new Deck();
-            DataContext = this;
-            handCards.ItemsSource = deck.cards;
         }
     }
 }

@@ -72,8 +72,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ClientHandler.cs" />
-    <Compile Include="Server.cs" />
+    <Compile Include="Model\ClientHandler.cs" />
+    <Compile Include="Model\Server.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\MainViewViewModel.cs" />
     <Page Include="MainWindow.xaml">
