@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 
-namespace Hearts.ViewModels
+namespace Hearts.Server
 {
-    public class ClientViewModel : ViewModelBase
+    class Game
     {
-
     }
 }

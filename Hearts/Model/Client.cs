@@ -49,14 +49,15 @@ namespace Hearts.Model
 
                     msg = msg.Replace("\0", String.Empty);
 
+
                     if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
                     {
                         response = await ReadMessage(msg);
 
-                        using (NetworkStream ns = toListen.GetStream())
+                        using (NetworkStream ns = client.GetStream())
                         {
                             msg = JsonConvert.SerializeObject(response);
-                            byte[] byteMsg = new byte[12000];
+                            byte[] byteMsg = new byte[10240];
                             byteMsg = System.Text.Encoding.ASCII.GetBytes(msg);
 
                             ns.Write(byteMsg.ToArray(), 0, byteMsg.Length);
@@ -75,18 +76,17 @@ namespace Hearts.Model
         {
             if (client.Connected)
             {
-                using (NetworkStream data = client.GetStream())
-                {
-                    byte[] byteMsg = new byte[10240];
+                //cannot dispose stream yet
+                NetworkStream data = client.GetStream();
+                byte[] byteMsg = new byte[10240];
 
-                    await data.ReadAsync(byteMsg, 0, (int)client.ReceiveBufferSize);
+                await data.ReadAsync(byteMsg, 0, (int)client.ReceiveBufferSize);
 
-                    string message = System.Text.Encoding.ASCII.GetString(byteMsg);
+                string message = System.Text.Encoding.ASCII.GetString(byteMsg);
 
-                    data.Flush();
+                //data.Flush();
 
-                    return message;
-                }
+                return message;
 
             }
             else
@@ -108,6 +108,8 @@ namespace Hearts.Model
                 {
                     case MessageType.CardRequest:
                         return SelectCard(serverRequest);
+                    case MessageType.ShowCards:
+
                     default:
                         Error("Wrong suited case!");
                         break;
@@ -124,8 +126,9 @@ namespace Hearts.Model
         }
 
 
-        private Message SelectCard(Message data)
+        private Message SelectCard(Message request)
         {
+            //Check if player has selected a proper card
             return new Message(MessageType.CardRequest, new Card(Suits.Diamonds, Values.Seven));
         }
 

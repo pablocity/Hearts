@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Hearts.Model;
+using Hearts.Services;
 
 namespace Hearts.Views
 {
@@ -32,6 +33,12 @@ namespace Hearts.Views
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             await client.ConnectAsync(IP.Text, int.Parse(Port.Text));
+
+            DialogService.OpenDialog();
+
+            ViewModelLocator.clientViewModel.ClientInstance = client;
+
+            this.Close();
         }
     }
 }

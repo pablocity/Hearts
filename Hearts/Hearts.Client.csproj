@@ -77,8 +77,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Client.cs" />
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="ViewModelLocator.cs" />
-    <Compile Include="ViewModels\ClientViewModel.cs" />
+    <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\LobbyViewModel.cs" />
     <Compile Include="Views\LobbyView.xaml.cs">
       <DependentUpon>LobbyView.xaml</DependentUpon>

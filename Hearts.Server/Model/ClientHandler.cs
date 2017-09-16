@@ -47,11 +47,11 @@ namespace Hearts.Server
                     while (!endFlag)
                     {
 
-                        List<byte> stringResponse = new List<byte>();
-                        // TODO sprawdzic czy dziala zamiana na tablice
-                        await networkStream.ReadAsync(stringResponse.ToArray(), 0, (int) client.ReceiveBufferSize);
+                        byte[] stringResponse = new byte[10240];
 
-                        clientMsg = System.Text.Encoding.ASCII.GetString(stringResponse.ToArray());
+                        await networkStream.ReadAsync(stringResponse, 0, (int) client.ReceiveBufferSize);
+
+                        clientMsg = System.Text.Encoding.ASCII.GetString(stringResponse);
                         clientMsg = clientMsg.Replace("\0", String.Empty);
 
                         if (!String.IsNullOrWhiteSpace(clientMsg) && !String.IsNullOrEmpty(clientMsg))

@@ -9,7 +9,7 @@ namespace Hearts
 {
     public class ViewModelLocator
     {
-        public static ClientViewModel clientViewModel { get; private set; } = new ClientViewModel();
+        public static GameViewModel clientViewModel { get; private set; } = new GameViewModel();
         public static LobbyViewModel lobbyViewModel { get; private set; } = new LobbyViewModel();
     }
 }

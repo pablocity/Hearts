@@ -21,13 +21,13 @@ namespace Hearts.Model
         public MessageType Request { get; private set; }
         public List<Card> CardsRequested { get; private set; }
 
-        public Message(MessageType request, Card card)
+        public Message(MessageType request, params Card[] card)
         {
             CardsRequested = new List<Card>();
             Request = request;
 
             if (card != null)
-                CardsRequested.Add(card);
+                CardsRequested.AddRange(card);
 
         }
     }

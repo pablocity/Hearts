@@ -1,21 +1,22 @@
-﻿<Window x:Class="Hearts.MainWindow"
+﻿<Window x:Class="Hearts.GameView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hearts"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="551.355">
+        
+        Title="Hearts - client" Height="350" Width="551.355">
     <Grid>
-        <ListView Background="LightGray" x:Name="handCards" Margin="10,206,10,10" Height="Auto" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        <ListView Background="LightGray" x:Name="handCards" Margin="10,210,10,10" HorizontalContentAlignment="Stretch">
 
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="110">
 
-                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="150" VerticalAlignment="Center" Width="85"/>
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="110" VerticalAlignment="Center" Width="75"/>
 
                         </StackPanel>
                     </Grid>
@@ -25,7 +26,7 @@
 
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"></StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"></StackPanel>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 

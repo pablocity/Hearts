@@ -22,11 +22,11 @@ namespace Hearts
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameView : Window
     {
         public Deck deck;
         
-        public MainWindow()
+        public GameView()
         {
             InitializeComponent();
 
