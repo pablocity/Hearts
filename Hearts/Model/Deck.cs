@@ -10,6 +10,7 @@ namespace Hearts.Model
     public class Deck
     {
         //TODO Test code
+        private Random random;
         public List<Card> cards = new List<Card>();
 
         public Deck()
@@ -29,12 +30,13 @@ namespace Hearts.Model
 
         public Deck(List<Card> cardsToAdd)
         {
+            random = new Random();
             cards = cardsToAdd;
         }
 
         
 
-        public void Shuffle(Random random)
+        public void Shuffle()
         {
             List<Card> temporaryCards = new List<Card>();
 
@@ -46,6 +48,34 @@ namespace Hearts.Model
             }
 
             cards = temporaryCards;
+        }
+
+        public Card Deal()
+        {
+            int index = random.Next(0, cards.Count);
+            Card card = cards[index];
+            cards.RemoveAt(index);
+
+            return card;
+        }
+
+        public void RemoveReduntant()
+        {
+            bool flag = false;
+            int index;
+
+            while (!flag)
+            {
+                index = random.Next(0, cards.Count);
+
+                if (cards[index].Replaceable)
+                {
+                    cards.RemoveAt(index);
+                    flag = true;
+                }
+            }
+            
+            
         }
     }
 }

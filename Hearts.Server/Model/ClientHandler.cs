@@ -14,9 +14,10 @@ namespace Hearts.Server
 {
     public class ClientHandler
     {
+        public Player PlayerStats { get; set; }
         public string Name { get; private set; }
 
-        readonly TcpClient client;
+        private readonly TcpClient client;
 
 
         public ClientHandler(TcpClient client, string name)
@@ -26,16 +27,21 @@ namespace Hearts.Server
 
             //TEST PURPOSE DOWN HERE
             //CAN BE OPTIMISED - params doesn't have to be cards array, suits and values are sufficient
-            SendData(new Message(MessageType.CardRequest, new Card(Suits.Clubs, Values.Ace)));
+            SendSth();
         }
 
-        public async void SendData(Message messageObject)
+        public async void SendSth()
+        {
+            Message clientResponse = await SendData(new Message(MessageType.CardRequest, new Card(Suits.Clubs, Values.Ace)));
+        }
+
+        public async Task<Message> SendData(Message messageObject)
         {
 
-            await Task.Run(async () =>
+            return await Task.Run(async () =>
             {
                 bool endFlag = false;
-                Message response;
+                Message response = null;
                 string clientMsg;
                 string toSend = JsonConvert.SerializeObject(messageObject);
                 List<byte> bytes = System.Text.Encoding.ASCII.GetBytes(toSend).ToList();
@@ -70,8 +76,9 @@ namespace Hearts.Server
                         }
                     }
 
-                    //process response message
                 }
+
+                return response;
             });
 
         }

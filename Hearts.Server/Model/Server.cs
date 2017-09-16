@@ -14,6 +14,7 @@ namespace Hearts.Server
 {
     public class Server
     {
+
         TcpListener listener;
 
         List<ClientHandler> clients;
@@ -68,6 +69,8 @@ namespace Hearts.Server
 
         public void StartGameAsync()
         {
+            Game.Instance.Players = clients;
+            Game.Instance.StartGame();
             Error("Game started but not implemented!");
         }
 

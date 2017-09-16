@@ -30,5 +30,7 @@ namespace Hearts.Model
                 CardsRequested.AddRange(card);
 
         }
+
+        //TODO dodać ToString()
     }
 }
