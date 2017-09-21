@@ -24,7 +24,7 @@ namespace Hearts.Server
         {
             this.client = client;
             Name = name;
-
+            PlayerStats = new Player(Name);
             //TEST PURPOSE DOWN HERE
             //CAN BE OPTIMISED - params doesn't have to be cards array, suits and values are sufficient
             SendSth();

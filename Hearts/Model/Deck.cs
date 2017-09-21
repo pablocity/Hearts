@@ -10,7 +10,7 @@ namespace Hearts.Model
     public class Deck
     {
         //TODO Test code
-        private Random random;
+        private Random random = new Random();
         public List<Card> cards = new List<Card>();
 
         public Deck()
@@ -19,18 +19,14 @@ namespace Hearts.Model
             {
                 for (int j = 0; j < Enum.GetNames(typeof(Suits)).Length; j++)
                 {
-                    if ((Values)i != Values.Ten)
-                    {
-                        Card cardToAdd = new Card((Suits)j, (Values)i);
-                        cards.Add(cardToAdd);
-                    }
+                    Card cardToAdd = new Card((Suits)j, (Values)i);
+                    cards.Add(cardToAdd);
                 }
             }
         }
 
         public Deck(List<Card> cardsToAdd)
         {
-            random = new Random();
             cards = cardsToAdd;
         }
 

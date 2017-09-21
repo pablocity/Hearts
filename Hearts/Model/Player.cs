@@ -21,11 +21,14 @@ namespace Hearts.Model
             get
             {
                 //TODO jeśli ilość kart jest taka sama nie sprawdzaj
-                foreach (Card card in garbage)
+                if (garbage != null)
                 {
-                    points += card.Points;
+                    foreach (Card card in garbage)
+                    {
+                        points += card.Points;
+                    }
                 }
-
+                
                 return points;
             }
         }

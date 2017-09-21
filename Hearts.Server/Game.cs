@@ -10,47 +10,51 @@ namespace Hearts.Server
     public class Game
     {
 
-        private static Game instance = null;
+        private static readonly Game instance = new Game();
         public static Game Instance
         {
             get
             {
-                if (instance == null)
-                    instance = new Game();
-
                 return instance;
             }
         }
         public List<ClientHandler> Players { get; set; }
 
-        private Deck deck;
+        private static Deck deck;
 
-        private Game()
+        static Game()
         {
             deck = new Deck();
+        }
+        private Game()
+        {
+            
         }
 
         public void StartGame()
         {
-            if (Players.Count != 3 && Players.Count != 4)
+            deck.Shuffle();
+            //TODO remove test case
+            if (Players.Count == 3)
+                deck.RemoveReduntant();
+            else if (Players.Count != 1)
                 return;
 
-            deck.Shuffle();
-
-            if (Players.Count == 3) deck.RemoveReduntant();
-
+            int deckCount = deck.cards.Count;
             foreach (ClientHandler cl in Players)
             {
-                for (int i = 0; i < deck.cards.Count/Players.Count; i++)
+
+                for (int i = 0; i < deckCount/Players.Count; i++)
                 {
                     cl.PlayerStats.hand.Add(deck.Deal());
                 }
             }
 
+            List<Card> testList = new List<Card>();
 
             foreach (ClientHandler cl in Players)
             {
-
+                testList = cl.PlayerStats.hand;
             }
         }
     }

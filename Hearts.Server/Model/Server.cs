@@ -44,7 +44,7 @@ namespace Hearts.Server
                 {
                     listener.Start();
 
-                    while (clients.Count < 3)
+                    while (clients.Count < 1)
                     {
                         clientNumber++;
 
@@ -76,7 +76,8 @@ namespace Hearts.Server
 
         private void Error(string errorMessage)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(errorMessage);
+            //throw new NotImplementedException();
         }
     }
 }
