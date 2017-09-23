@@ -43,8 +43,8 @@ namespace Hearts.Server
                 await Task.Run(async () =>
                 {
                     listener.Start();
-
-                    while (clients.Count < 1)
+                    //TODO remove test case
+                    while (clients.Count < 3)
                     {
                         clientNumber++;
 
@@ -72,6 +72,19 @@ namespace Hearts.Server
             Game.Instance.Players = clients;
             Game.Instance.StartGame();
             Error("Game started but not implemented!");
+        }
+
+        public async Task<List<string>> SendMessage()
+        {
+            List<string> messages = new List<string>();
+
+            foreach (ClientHandler cl in clients)
+            {
+                Message m = await cl.SendSth();
+                messages.Add($"{m.CardsRequested[0]}\n{m.Request.ToString()}\n");
+            }
+
+            return messages;
         }
 
         private void Error(string errorMessage)

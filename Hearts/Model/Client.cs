@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Timers;
 
 namespace Hearts.Model
 {
@@ -18,6 +19,7 @@ namespace Hearts.Model
         public Client()
         {
             client = new TcpClient();
+            
         }
 
         public async Task ConnectAsync(string ip, int port)
@@ -26,17 +28,18 @@ namespace Hearts.Model
             {
                 await client.ConnectAsync(IPAddress.Parse(ip), port);
 
-                Listen(client);
+                Listen();
 
             }
             catch (Exception ex)
             {
+                Error(ex.Message);
                 throw new NotImplementedException();
             }
 
         }
 
-        private async void Listen(TcpClient toListen)
+        private async void Listen()
         {
             await Task.Run(async () =>
             {
@@ -45,23 +48,28 @@ namespace Hearts.Model
                 while (true)
                 {
 
-                    string msg = await ReceiveData(toListen);
+                    string msg = await ReceiveData(client);
 
-                    msg = msg.Replace("\0", String.Empty);
+                    //msg = msg.Replace("\0", String.Empty);
 
 
                     if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
                     {
-                        response = await ReadMessage(msg);
+                        response = ReadMessage(msg);
 
-                        using (NetworkStream ns = client.GetStream())
+                        if (client.Connected)
                         {
+                            NetworkStream ns = client.GetStream();
                             msg = JsonConvert.SerializeObject(response);
                             byte[] byteMsg = new byte[10240];
                             byteMsg = System.Text.Encoding.ASCII.GetBytes(msg);
 
                             ns.Write(byteMsg.ToArray(), 0, byteMsg.Length);
+                            ns.Flush();
                         }
+
+
+                        //TODO flush stream everywhere after closing app
                     }
 
                     msg = "";
@@ -73,6 +81,30 @@ namespace Hearts.Model
         }
 
         private async Task<string> ReceiveData(TcpClient client)
+        {
+            if (client.Connected)
+            {
+                NetworkStream data = client.GetStream();
+
+                byte[] byteMsg = new byte[10240];
+
+                int i = await data.ReadAsync(byteMsg, 0, (int)client.ReceiveBufferSize);
+
+                string message = System.Text.Encoding.ASCII.GetString(byteMsg);
+
+                message = message.Replace("\0", String.Empty);
+
+                //data.Flush();
+
+
+                return message;
+            }
+            else
+                return "";
+            
+        }
+        /*
+         * private async Task<string> ReceiveData(TcpClient client)
         {
             if (client.Connected)
             {
@@ -93,8 +125,9 @@ namespace Hearts.Model
                 return "";
 
         }
+        */
 
-        private async Task<Message> ReadMessage(string JSON_Message)
+        private /*async Task<Message>*/Message ReadMessage(string JSON_Message)
         {
             try
             {

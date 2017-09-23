@@ -28,7 +28,7 @@ namespace Hearts.Server
         }
         private Game()
         {
-            
+            //TODO check client's memory leak
         }
 
         public void StartGame()
@@ -37,7 +37,7 @@ namespace Hearts.Server
             //TODO remove test case
             if (Players.Count == 3)
                 deck.RemoveReduntant();
-            else if (Players.Count != 1)
+            else if (Players.Count != 2)
                 return;
 
             int deckCount = deck.cards.Count;

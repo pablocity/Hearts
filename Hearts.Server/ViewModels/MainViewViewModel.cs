@@ -27,6 +27,7 @@ namespace Hearts.Server.ViewModels
             }
         }
         public RelayCommand StartClick { get; private set; }
+        public RelayCommand SendClick { get; private set; }
 
         private string ipAdress;
         public string IPAdress
@@ -63,6 +64,7 @@ namespace Hearts.Server.ViewModels
             server = new Server();
             messages = new ObservableCollection<string>();
             StartClick = new RelayCommand(startServer);
+            SendClick = new RelayCommand(sendMessage);
         }
 
         private void startServer()
@@ -73,6 +75,16 @@ namespace Hearts.Server.ViewModels
             server.StartServerAsync(IPAdress, PortNumber);
 
             Messages.Add($"Server has started succesfully\n IP: {IPAdress} port number {PortNumber}");
+        }
+
+        private async void sendMessage()
+        {
+            List<string> temporary = Messages.ToList();
+            List<string> temp = await server.SendMessage();
+            temporary.AddRange(temp);
+
+            ObservableCollection<string> oc = new ObservableCollection<string>(temporary);
+            Messages = oc;
         }
     }
 }

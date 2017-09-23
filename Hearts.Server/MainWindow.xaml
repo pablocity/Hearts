@@ -10,7 +10,7 @@
 
     <Grid>
         <TextBox HorizontalAlignment="Left" Height="25" Margin="10,22,0,0" TextWrapping="Wrap" Text="{Binding IPAdress, Mode=TwoWay}" VerticalAlignment="Top" Width="109"/>
-        <Button Content="Start server" FontFamily="Courier New" FontSize="15" HorizontalAlignment="Left" Margin="194,22,0,0" VerticalAlignment="Top" Width="133" Height="25" Command="{Binding StartClick}"/>
+        <Button Content="Start server" FontFamily="Courier New" FontSize="15" HorizontalAlignment="Left" Margin="194,22,0,0" VerticalAlignment="Top" Width="51" Height="25" Command="{Binding StartClick}"/>
         <TextBox HorizontalAlignment="Left" Height="25" Margin="124,22,0,0" TextWrapping="Wrap" Text="{Binding PortNumber, Mode=TwoWay}" VerticalAlignment="Top" Width="65"/>
         <ListView HorizontalAlignment="Left" Height="238" Margin="194,97,0,0" VerticalAlignment="Top" Width="133">
             <ListView.View>
@@ -23,6 +23,7 @@
         <ListView ItemsSource="{Binding Path=Messages}" HorizontalAlignment="Left" Height="269" Margin="10,66,0,0" VerticalAlignment="Top" Width="163">
             
         </ListView>
+        <Button Content="Send" FontFamily="Courier New" FontSize="15" HorizontalAlignment="Left" Margin="260,21,0,0" VerticalAlignment="Top" Width="51" Height="25" Command="{Binding SendClick}"/>
 
     </Grid>
 </Window>
