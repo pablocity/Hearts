@@ -7,7 +7,8 @@ using System.Net.Sockets;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Timers;
+using Hearts.ViewModels;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace Hearts.Model
 {
@@ -55,7 +56,10 @@ namespace Hearts.Model
 
                     if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
                     {
-                        response = ReadMessage(msg);
+                        response = await ReadMessage(msg);
+
+                        if (response == null)
+                            continue;
 
                         if (client.Connected)
                         {
@@ -103,31 +107,8 @@ namespace Hearts.Model
                 return "";
             
         }
-        /*
-         * private async Task<string> ReceiveData(TcpClient client)
-        {
-            if (client.Connected)
-            {
-                //cannot dispose stream yet
-                NetworkStream data = client.GetStream();
-                byte[] byteMsg = new byte[10240];
 
-                await data.ReadAsync(byteMsg, 0, (int)client.ReceiveBufferSize);
-
-                string message = System.Text.Encoding.ASCII.GetString(byteMsg);
-
-                //data.Flush();
-
-                return message;
-
-            }
-            else
-                return "";
-
-        }
-        */
-
-        private /*async Task<Message>*/Message ReadMessage(string JSON_Message)
+        private async Task<Message> ReadMessage(string JSON_Message)
         {
             try
             {
@@ -140,9 +121,12 @@ namespace Hearts.Model
                 switch (serverRequest.Request)
                 {
                     case MessageType.CardRequest:
-                        return SelectCard(serverRequest);
+                        return await SelectCard(serverRequest);
                     case MessageType.ShowCards:
-
+                        await ShowCards();
+                        return null;
+                    case MessageType.PassOn:
+                        return await PassOn();
                     default:
                         Error("Wrong suited case!");
                         break;
@@ -159,10 +143,31 @@ namespace Hearts.Model
         }
 
 
-        private Message SelectCard(Message request)
+        private async Task<Message> SelectCard(Message request)
         {
+            Messenger.Default.Send<Message>(request);
+
+            await Task.Run(() =>
+            {
+                while (!ViewModelLocator.clientViewModel.Ready)
+                {
+
+                }
+            });
+                
+            
             //Check if player has selected a proper card
-            return new Message(MessageType.CardRequest, new Card(Suits.Diamonds, Values.Seven));
+            //return new Message(MessageType.CardRequest, null, new Card(Suits.Diamonds, Values.Seven));
+        }
+
+        private async Task<Message> ShowCards()
+        {
+
+        }
+
+        private async Task<Message> PassOn()
+        {
+            //while ()
         }
 
         private void SendData()

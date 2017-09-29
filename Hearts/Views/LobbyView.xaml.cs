@@ -34,11 +34,11 @@ namespace Hearts.Views
         {
             await client.ConnectAsync(IP.Text, int.Parse(Port.Text));
 
-            //DialogService.OpenDialog();
+            DialogService.OpenDialog();
 
-            //ViewModelLocator.clientViewModel.ClientInstance = client;
+            ViewModelLocator.clientViewModel.ClientInstance = client;
 
-            //this.Close();
+            this.Close();
             //TODO remove test case
         }
     }

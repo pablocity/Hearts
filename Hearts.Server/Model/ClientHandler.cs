@@ -65,10 +65,10 @@ namespace Hearts.Server
 
         public async Task<Message> SendSth()
         {
-            /*Message clientResponse = */return await SendData(new Message(MessageType.CardRequest, new Card(Suits.Clubs, Values.Ace)));
+            /*Message clientResponse = */return await SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Ace)));
         }
 
-        public async Task<Message> SendData(Message messageObject)
+        public async Task<Message> SendData(Message messageObject, bool waitForResponse = true)
         {
 
             return await Task.Run(async () =>
@@ -81,6 +81,9 @@ namespace Hearts.Server
 
                 NetworkStream networkStream = client.GetStream();
                 networkStream.Write(bytes.ToArray(), 0, bytes.Length);
+
+                if (!waitForResponse)
+                    return null;
 
                 while (!endFlag)
                 {

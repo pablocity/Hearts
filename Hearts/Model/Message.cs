@@ -11,6 +11,7 @@ namespace Hearts.Model
         Win,
         Lose,
         CardRequest,
+        PassOn,
         YourTurn,
         ShowCards,
         Error
@@ -21,7 +22,9 @@ namespace Hearts.Model
         public MessageType Request { get; private set; }
         public List<Card> CardsRequested { get; private set; }
 
-        public Message(MessageType request, params Card[] card)
+        public Player PlayerStats { get; private set; }
+
+        public Message(MessageType request, Player player, params Card[] card)
         {
             CardsRequested = new List<Card>();
             Request = request;

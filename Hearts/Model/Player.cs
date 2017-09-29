@@ -9,8 +9,9 @@ namespace Hearts.Model
     public class Player
     {
         public string Name;
-        public List<Card> hand;
-        public Card selectedCard;
+        public List<Card> Hand;
+        public List<Card> SelectedCards;
+        public bool PassOrSelect;
 
         private List<Card> garbage;
         //TODO finish token, wysyłany jako messagae object w celu powiadmoienia serwera o zakończeniu pojedynczego zleconego zadania
@@ -35,13 +36,15 @@ namespace Hearts.Model
 
         public Player(string name)
         {
-            hand = new List<Card>();
+            PassOrSelect = true;
+            Hand = new List<Card>();
+            SelectedCards = new List<Card>();
             Name = name;
         }
 
         public Card SelectCard(int index)
         {
-            return hand[index];
+            return Hand[index];
         }
 
     }

@@ -20,7 +20,7 @@
 
                         </StackPanel>
                     </Grid>
-                    
+
                 </DataTemplate>
             </ListView.ItemTemplate>
 
@@ -31,6 +31,7 @@
             </ListView.ItemsPanel>
 
         </ListView>
+        <Button Content="Przekaż karty" Command="{Binding }" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
 
     </Grid>
 </Window>
