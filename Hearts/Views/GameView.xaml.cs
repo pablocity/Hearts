@@ -31,8 +31,8 @@ namespace Hearts
             InitializeComponent();
 
             deck = new Deck();
-            DataContext = this;
-            handCards.ItemsSource = deck.cards;
+            //DataContext = this;
+            //handCards.ItemsSource = deck.cards;
         }
     }
 }

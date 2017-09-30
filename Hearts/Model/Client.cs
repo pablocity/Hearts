@@ -121,12 +121,13 @@ namespace Hearts.Model
                 switch (serverRequest.Request)
                 {
                     case MessageType.CardRequest:
-                        return await SelectCard(serverRequest);
+                        return await ViewModelLocator.clientViewModel.SelectCard(serverRequest);
                     case MessageType.ShowCards:
-                        await ShowCards();
+                        Messenger.Default.Send<Message>(serverRequest);
+                        ViewModelLocator.clientViewModel.ShowCards(new Message(MessageType.ShowCards, null, new Card(Suits.Spades, Values.Queen)));
                         return null;
                     case MessageType.PassOn:
-                        return await PassOn();
+                        return await ViewModelLocator.clientViewModel.PassOn();
                     default:
                         Error("Wrong suited case!");
                         break;
@@ -143,32 +144,7 @@ namespace Hearts.Model
         }
 
 
-        private async Task<Message> SelectCard(Message request)
-        {
-            Messenger.Default.Send<Message>(request);
-
-            await Task.Run(() =>
-            {
-                while (!ViewModelLocator.clientViewModel.Ready)
-                {
-
-                }
-            });
-                
-            
-            //Check if player has selected a proper card
-            //return new Message(MessageType.CardRequest, null, new Card(Suits.Diamonds, Values.Seven));
-        }
-
-        private async Task<Message> ShowCards()
-        {
-
-        }
-
-        private async Task<Message> PassOn()
-        {
-            //while ()
-        }
+        
 
         private void SendData()
         {

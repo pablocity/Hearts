@@ -32,36 +32,60 @@ namespace Hearts.ViewModels
             }
         }
 
-        public ObservableCollection<Card> cardsInHand;
+        private ObservableCollection<Card> cardsInHand;
+        public ObservableCollection<Card> CardsInHand
+        {
+            get
+            {
+                return cardsInHand;
+            }
+            private set
+            {
+                cardsInHand = value;
+                RaisePropertyChanged(() => CardsInHand);
+            }
+        }
 
         public RelayCommand passCards;
 
         public GameViewModel()
         {
-            Messenger.Default.Register<Message>(this, RetrieveMessage);
             cardsInHand = new ObservableCollection<Card>();
             passCards = new RelayCommand(() => 
             {
                 if (Stats.SelectedCards.Count == 3)
                     Ready = true;
             });
+
+            Messenger.Default.Register<Message>(this, ShowCards);
+
+            CardsInHand.Add(new Card(Suits.Clubs, Values.Eight));
         }
 
 
-        private async Task<Message> SelectCard(Message request)
+        public async Task<Message> SelectCard(Message request)
         {
+            return new Message(MessageType.Error, null, null);
             //Check if player has selected a proper card
             //return new Message(MessageType.CardRequest, null, new Card(Suits.Diamonds, Values.Seven));
         }
 
-        private async Task<Message> ShowCards()
+        public void ShowCards(Message message)
         {
+            List<Card> hand = new List<Card>();
 
+            foreach (Card c in message.CardsRequested)
+            {
+                hand.Add(c);
+            }
+
+            CardsInHand = new ObservableCollection<Card>(hand);
+            
         }
 
-        private async Task<Message> PassOn()
+        public async Task<Message> PassOn()
         {
-            //while ()
+            return new Message(MessageType.Error, null, null);
         }
 
         //TODO check equality comparison

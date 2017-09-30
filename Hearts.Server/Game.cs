@@ -37,7 +37,7 @@ namespace Hearts.Server
             //TODO remove test case
             if (Players.Count == 3)
                 deck.RemoveReduntant();
-            else if (Players.Count != 4)
+            else if (Players.Count != 2)
                 return;
 
             int deckCount = deck.cards.Count;
@@ -50,15 +50,23 @@ namespace Hearts.Server
                 }
             }
 
-            foreach (ClientHandler cl in Players)
+            try
             {
-                await cl.SendData(new Message(MessageType.ShowCards, null, cl.PlayerStats.Hand.ToArray()));
+                foreach (ClientHandler cl in Players)
+                {
+                    //TODO remember aobut disabling response in showCards message
+                    await cl.SendData(new Message(MessageType.ShowCards, null, cl.PlayerStats.Hand.ToArray()), false);
+                }
+
+                foreach (ClientHandler cl in Players)
+                {
+                    Message response = await cl.SendData(new Message(MessageType.PassOn, null));
+
+                }
             }
-
-            foreach (ClientHandler cl in Players)
+            catch (Exception ex)
             {
-                Message response = await cl.SendData(new Message(MessageType.PassOn, null));
-
+                throw new NotImplementedException();
             }
 
 
@@ -80,12 +88,6 @@ namespace Hearts.Server
 
             }
 
-            //List<Card> testList = new List<Card>();
-
-            //foreach (ClientHandler cl in Players)
-            //{
-            //    testList = cl.PlayerStats.hand;
-            //}
         }
     }
 }

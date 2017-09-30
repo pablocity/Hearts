@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hearts"
         mc:Ignorable="d"
-        
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=clientViewModel}"
         Title="Hearts - client" Height="350" Width="551.355">
     <Grid>
-        <ListView Background="LightGray" x:Name="handCards" Margin="10,210,10,10" HorizontalContentAlignment="Stretch">
+        <ListView ItemsSource="{Binding Path=CardsInHand}" Background="LightGray" x:Name="handCards" Margin="10,210,10,10" HorizontalContentAlignment="Stretch">
 
 
             <ListView.ItemTemplate>
@@ -17,6 +17,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="110">
 
                             <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="110" VerticalAlignment="Center" Width="75"/>
+                            
 
                         </StackPanel>
                     </Grid>
