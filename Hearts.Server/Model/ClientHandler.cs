@@ -29,7 +29,7 @@ namespace Hearts.Server
             //TEST PURPOSE DOWN HERE
             //CAN BE OPTIMISED - params doesn't have to be cards array, suits and values are sufficient
 
-            SendSth();
+            //SendSth();
 
             //Task.Run(async () =>
             //{

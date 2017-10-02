@@ -19,6 +19,8 @@ namespace Hearts.ViewModels
 
         public Player Stats;
 
+        private Message serverOrder;
+
         Client clientInstance;
         public Client ClientInstance
         {
@@ -58,8 +60,11 @@ namespace Hearts.ViewModels
             });
 
             Messenger.Default.Register<Message>(this, ShowCards);
+        }
 
-            CardsInHand.Add(new Card(Suits.Clubs, Values.Eight));
+        private void RetrieveMessage(Message message)
+        {
+
         }
 
 

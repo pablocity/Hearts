@@ -114,17 +114,17 @@ namespace Hearts.Model
             {
                 Message response = null;
 
-                JToken.Parse(JSON_Message); //If not JSON throw exception
+                //JToken.Parse(JSON_Message); //If not JSON throw exception
 
                 Message serverRequest = JsonConvert.DeserializeObject<Message>(JSON_Message);
 
                 switch (serverRequest.Request)
                 {
                     case MessageType.CardRequest:
+                        Messenger.Default.Send<Message>(serverRequest);
                         return await ViewModelLocator.clientViewModel.SelectCard(serverRequest);
                     case MessageType.ShowCards:
                         Messenger.Default.Send<Message>(serverRequest);
-                        ViewModelLocator.clientViewModel.ShowCards(new Message(MessageType.ShowCards, null, new Card(Suits.Spades, Values.Queen)));
                         return null;
                     case MessageType.PassOn:
                         return await ViewModelLocator.clientViewModel.PassOn();
@@ -153,7 +153,8 @@ namespace Hearts.Model
 
         private void Error(string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(message);
+            //throw new NotImplementedException();
         }
     }
 }

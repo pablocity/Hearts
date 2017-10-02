@@ -28,7 +28,7 @@ namespace Hearts.Server
         }
         private Game()
         {
-            //TODO check client's memory leak
+            
         }
 
         public async void StartGame()
