@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Hearts.Model;
 using Hearts.Services;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace Hearts.Views
 {
@@ -34,12 +35,9 @@ namespace Hearts.Views
         {
             await client.ConnectAsync(IP.Text, int.Parse(Port.Text));
 
-            DialogService.OpenDialog();
-
-            ViewModelLocator.clientViewModel.ClientInstance = client;
+            DialogService.OpenDialog(client);
 
             this.Close();
-            //TODO remove test case
         }
     }
 }

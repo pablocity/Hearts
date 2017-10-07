@@ -26,6 +26,7 @@ namespace Hearts.Model
 
         public Message(MessageType request, Player player, params Card[] card)
         {
+            PlayerStats = player;
             CardsRequested = new List<Card>();
             Request = request;
 

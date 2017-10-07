@@ -56,7 +56,7 @@ namespace Hearts.Model
 
                     if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
                     {
-                        response = await ReadMessage(msg);
+                        ReadMessage(msg);
 
                         if (response == null)
                             continue;
@@ -108,37 +108,39 @@ namespace Hearts.Model
             
         }
 
-        private async Task<Message> ReadMessage(string JSON_Message)
+        private void ReadMessage(string JSON_Message)
         {
             try
             {
-                Message response = null;
+                //Message response = null;
 
-                //JToken.Parse(JSON_Message); //If not JSON throw exception
+                JToken.Parse(JSON_Message); //If not JSON throw exception
 
                 Message serverRequest = JsonConvert.DeserializeObject<Message>(JSON_Message);
 
-                switch (serverRequest.Request)
-                {
-                    case MessageType.CardRequest:
-                        Messenger.Default.Send<Message>(serverRequest);
-                        return await ViewModelLocator.clientViewModel.SelectCard(serverRequest);
-                    case MessageType.ShowCards:
-                        Messenger.Default.Send<Message>(serverRequest);
-                        return null;
-                    case MessageType.PassOn:
-                        return await ViewModelLocator.clientViewModel.PassOn();
-                    default:
-                        Error("Wrong suited case!");
-                        break;
-                }
+                Messenger.Default.Send<Message>(serverRequest);
 
-                return response;
+                //switch (serverRequest.Request)
+                //{
+                //    case MessageType.CardRequest:
+                //        Messenger.Default.Send<Message>(serverRequest);
+                //        return await ViewModelLocator.clientViewModel.SelectCard(serverRequest);
+                //    case MessageType.ShowCards:
+                //        Messenger.Default.Send<Message>(serverRequest);
+                //        return null;
+                //    case MessageType.PassOn:
+                //        return await ViewModelLocator.clientViewModel.PassOn();
+                //    default:
+                //        Error("Wrong suited case!");
+                //        break;
+                //}
+
+                //return response;
             }
             catch (Exception ex)
             {
                 Error(ex.Message);
-                return null;
+                return;
             }
 
         }
@@ -146,9 +148,14 @@ namespace Hearts.Model
 
         
 
-        private void SendData()
+        public void SendData(Message data)
         {
+            string toSend = JsonConvert.SerializeObject(data);
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(toSend);
 
+            NetworkStream networkStream = client.GetStream();
+            networkStream.Write(bytes.ToArray(), 0, bytes.Length);
+            networkStream.Flush();
         }
 
         private void Error(string message)
