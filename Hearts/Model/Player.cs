@@ -11,7 +11,9 @@ namespace Hearts.Model
         public string Name;
         public List<Card> Hand;
         public List<Card> SelectedCards;
+        public Card CardToSend;
         public bool PassOrSelect;
+        public bool IsDealer = false;
 
         private List<Card> garbage;
         //TODO finish token, wysyłany jako messagae object w celu powiadmoienia serwera o zakończeniu pojedynczego zleconego zadania
@@ -22,8 +24,10 @@ namespace Hearts.Model
             get
             {
                 //TODO jeśli ilość kart jest taka sama nie sprawdzaj
-                if (garbage != null)
+                if (garbage != null && garbage.Count > 0)
                 {
+                    points = 0;
+
                     foreach (Card card in garbage)
                     {
                         points += card.Points;
@@ -36,6 +40,7 @@ namespace Hearts.Model
 
         public Player(string name)
         {
+            garbage = new List<Card>();
             PassOrSelect = true;
             Hand = new List<Card>();
             SelectedCards = new List<Card>();

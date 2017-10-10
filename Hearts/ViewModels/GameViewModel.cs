@@ -111,6 +111,58 @@ namespace Hearts.ViewModels
             
         }
 
+        private bool CheckSelectedCard(Card selectedCard)
+        {
+            if (serverOrder.Request == MessageType.CardRequest)
+            {
+                if (serverOrder.CardsRequested[0] == selectedCard)
+                    return true;
+                else
+                {
+                    foreach (Card c in Stats.Hand)
+                    {
+                        if (c.Name == serverOrder.CardsRequested[0].Name)
+                        {
+                            Inform($"Wybierz wymaganą kartę: {serverOrder.CardsRequested[0].Name}");
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                }
+            }
+
+            if (serverOrder.Request == MessageType.YourTurn)
+            {
+                if (serverOrder.CardsRequested[0].Suit == selectedCard.Suit)
+                    return true;
+                else
+                {
+                    foreach (Card card in Stats.Hand)
+                    {
+                        if (card.Suit == serverOrder.CardsRequested[0].Suit)
+                        {
+                            Inform("Posiadasz wymagany kolor!");
+                            return false;
+                        }
+                    }
+
+                    if (selectedCard.Suit == Suits.Hearts && !serverOrder.HeartsAllowed)
+                    {
+                        Inform("Nie możesz jeszcze wyłożyć serc!");
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+
+            Inform($"Polecenie serwera to: {serverOrder.Request}");
+            return false;
+
+        }
+
         public void PassOn()
         {
             if (CanBePassed())
@@ -146,6 +198,7 @@ namespace Hearts.ViewModels
         }
 
         //TODO check equality comparison
+        //TODO change PassOrSelect
         private void Select(Card toSelect)
         {
             Inform("Select");

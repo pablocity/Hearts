@@ -8,13 +8,14 @@ namespace Hearts.Model
 {
     public enum MessageType
     {
-        Win,
-        Lose,
-        CardRequest,
-        PassOn,
-        YourTurn,
-        ShowCards,
-        Error
+        Win, //indicates player has won a game
+        Lose, // indicates player has lost the game
+        CardRequest, //demands a specific card
+        PassOn, //it is a command to pass on three cards
+        YourTurn, //indicates player's turn
+        ShowCards, //it shows updated cards in hand
+        ShowPot, //it shows current pot of cards
+        Error //shows an error that occured
     }
 
     public class Message
@@ -23,6 +24,11 @@ namespace Hearts.Model
         public List<Card> CardsRequested { get; private set; }
 
         public Player PlayerStats { get; private set; }
+
+        public Suits? Suit { get; private set; } = null;
+
+        //TODO check Game.HeartsAllowed after each round
+        public bool HeartsAllowed { get; set; }
 
         public Message(MessageType request, Player player, params Card[] card)
         {
@@ -33,8 +39,38 @@ namespace Hearts.Model
             if (card != null)
                 CardsRequested.AddRange(card);
 
+            if (request == MessageType.YourTurn)
+            {
+                Suit = card[0].Suit;
+            }
+
         }
 
         //TODO dodać ToString()
+        public override string ToString()
+        {
+
+            string description = $"Request type: {Request}\nRequested card(s):\n";
+
+            if (CardsRequested.Count > 1)
+            {
+                foreach (Card card in CardsRequested)
+                {
+                    description += $"{card.Name}\n";
+                }
+            }
+            else
+            {
+                description += $"{CardsRequested[0]}\n";
+            }
+
+
+            description += (Suit != null) ? $"Suit: {Suit}\n" : "";
+
+            description += $"Hearts allowed: {HeartsAllowed}";
+
+            return description;
+   
+        }
     }
 }

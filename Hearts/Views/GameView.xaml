@@ -41,7 +41,37 @@
 
         </ListView>
         <Button Content="Przekaż karty" Command="{Binding Path=passCards}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
-        <ListBox HorizontalAlignment="Left" ItemsSource="{Binding Messages}" Background="LightGray" Height="186" Margin="399,10,0,0" VerticalAlignment="Top" Width="136"/>
+        <ListView ItemsSource="{Binding CardsInHand}" Background="LightGray" x:Name="cardsPot" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Margin="0, 50, 0, 0" HorizontalAlignment="Center" Width="325" Height="150">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <!--<i:InvokeCommandAction Command="{Binding Path=selectCard}" CommandParameter="{Binding ElementName=handCards, Path=SelectedItem}"></i:InvokeCommandAction>-->
+                    <command:EventToCommand Command="{Binding selectCard}" CommandParameter="{Binding SelectedItem, ElementName=handCards}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="110">
+
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="110" VerticalAlignment="Center" Width="75"/>
+
+
+                        </StackPanel>
+                    </Grid>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+
+        </ListView>
+        <Button Content="Zatwierdź kartę" Command="{Binding passCards}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
 
     </Grid>
 </Window>

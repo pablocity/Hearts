@@ -10,6 +10,8 @@ namespace Hearts.Server
     public class Game
     {
 
+        public static bool HeartsAllowed = false;
+
         private static readonly Game instance = new Game();
         public static Game Instance
         {
@@ -30,6 +32,8 @@ namespace Hearts.Server
         {
             
         }
+
+        bool isEnd = false;
 
         public async void StartGame()
         {
@@ -85,11 +89,15 @@ namespace Hearts.Server
                     }
 
                     await Players[i].SendData(new Message(MessageType.ShowCards, /*Players[i].PlayerStats*/null, Players[i].PlayerStats.Hand.ToArray()), false);
-                    //await Players[index].SendData(new Message(MessageType.ShowCards, null, Players[i].PlayerStats.Hand.ToArray()), false);
 
                 }
                 //TODO REFACTOR
                 await UpdateCards();
+
+                //while (!isEnd)
+                //{
+
+                //}
 
 
             }
@@ -98,6 +106,52 @@ namespace Hearts.Server
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+
+        private async Task PlayRound()
+        {
+            foreach (ClientHandler cl in Players)
+            {
+                Message clientCard = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Two)));
+                cl.PlayerStats.CardToSend = clientCard.CardsRequested[0];
+            }
+
+            int starterIndex = -1;
+
+            List<ClientHandler> temporary = new List<ClientHandler>();
+
+            //TODO override Equals in card class
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].PlayerStats.CardToSend.Value == Values.Two && Players[i].PlayerStats.CardToSend.Suit == Suits.Clubs)
+                {
+                    starterIndex = i;
+                    break;
+                }
+
+                if (starterIndex < i)
+                    temporary.Add(Players[i]);
+            }
+
+            if (temporary.Count > 0)
+            {
+                Players.RemoveRange(0, temporary.Count);
+                Players.AddRange(temporary);
+                temporary = null;
+            }
+
+            
+        }
+
+        private void Assess(ref IEnumerable<ClientHandler> players, Card firstCard)
+        {
+            Suits suit = firstCard.Suit;
+
+            foreach (ClientHandler c in players)
+            {
+                
+            }
         }
 
 
