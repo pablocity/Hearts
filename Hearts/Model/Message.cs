@@ -13,6 +13,7 @@ namespace Hearts.Model
         CardRequest, //demands a specific card
         PassOn, //it is a command to pass on three cards
         YourTurn, //indicates player's turn
+        YouDeal, //informs player that he is dealing in this round
         ShowCards, //it shows updated cards in hand
         ShowPot, //it shows current pot of cards
         Error //shows an error that occured

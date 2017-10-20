@@ -76,13 +76,19 @@ namespace Hearts.ViewModels
             switch (serverRequest.Request)
             {
                 case MessageType.CardRequest:
-                    ShowCards(serverRequest);
+                    Inform($"Server requested: {serverOrder.CardsRequested[0]}");
                     break;
                 case MessageType.ShowCards:
                     ShowCards(serverRequest);
                     break;
                 case MessageType.PassOn:
                     Inform("Pass on");
+                    break;
+                case MessageType.ShowPot:
+                    Inform($"Pot contains: {serverOrder.CardsRequested}");
+                    break;
+                case MessageType.YouDeal:
+                    Inform($"You deal now!");
                     break;
             }
         }
@@ -113,6 +119,16 @@ namespace Hearts.ViewModels
 
         private bool CheckSelectedCard(Card selectedCard)
         {
+
+            if (serverOrder.Request == MessageType.YouDeal)
+            {
+                if (selectedCard.Suit == Suits.Hearts && !serverOrder.HeartsAllowed)
+                    return false;
+
+                return true;
+            }
+
+
             if (serverOrder.Request == MessageType.CardRequest)
             {
                 if (serverOrder.CardsRequested[0] == selectedCard)

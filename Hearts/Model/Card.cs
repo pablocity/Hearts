@@ -88,6 +88,38 @@ namespace Hearts.Model
                 return true;
         }
 
+
+        public override bool Equals(object obj)
+        {
+            Card card = obj is Card ? obj as Card : null;
+
+            if (card != null && Name == card.Name)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator ==(Card c1, Card c2)
+        {
+            if (c1.Equals(c2))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool operator !=(Card c1, Card c2)
+        {
+            if (!c1.Equals(c2))
+                return true;
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override string ToString()
         {
             return String.Format("{0} replaceable: {1}, points: {2}", Name, Replaceable, Points);

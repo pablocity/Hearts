@@ -11,12 +11,27 @@ namespace Hearts.Model
         public string Name;
         public List<Card> Hand;
         public List<Card> SelectedCards;
-        public Card CardToSend;
         public bool PassOrSelect;
         public bool IsDealer = false;
-
-        private List<Card> garbage;
+        public List<Card> garbage;
         //TODO finish token, wysyłany jako messagae object w celu powiadmoienia serwera o zakończeniu pojedynczego zleconego zadania
+
+
+        private Card currentCard;
+        public Card CurrentCard
+        {
+            get
+            {
+                return currentCard;
+            }
+            set
+            {
+                //TODO check if setter removes played card
+                currentCard = value;
+                Hand.Remove(value);
+            }
+        }
+
 
         private int points;
         public int Points
