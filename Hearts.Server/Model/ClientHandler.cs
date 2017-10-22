@@ -19,47 +19,12 @@ namespace Hearts.Server
         public string Name { get; private set; }
 
         private readonly TcpClient client;
-        private Message currentResponse = null;
 
         public ClientHandler(TcpClient client, string name)
         {
             this.client = client;
             Name = name;
             PlayerStats = new Player(Name);
-            //TEST PURPOSE DOWN HERE
-            //CAN BE OPTIMISED - params doesn't have to be cards array, suits and values are sufficient
-
-            //SendSth();
-
-            //Task.Run(async () =>
-            //{
-
-            //    while (true)
-            //    {
-
-            //        string msg = await SocketUtility.ReceiveData(client);
-
-            //        msg = msg.Replace("\0", String.Empty);
-
-            //        if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
-            //        {
-            //            try
-            //            {
-            //                JToken.Parse(msg); // if string isn't JSON throws an exception
-            //                currentResponse = JsonConvert.DeserializeObject<Message>(msg);
-
-            //                //endFlag = (currentResponse.Request == messageObject.Request); //Checks if response message type is the same as it was in sent data
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                NotifyClient($"Wrong response, it's not a valid message type!\n{ex.Message}");
-            //            }
-            //        }
-
-            //        msg = "";
-            //    }
-
-            //});
 
         }
 
@@ -80,7 +45,7 @@ namespace Hearts.Server
                 byte[] bytes = System.Text.Encoding.ASCII.GetBytes(toSend);
 
                 NetworkStream networkStream = client.GetStream();
-                networkStream.Write(bytes.ToArray(), 0, bytes.Length);
+                networkStream.Write(bytes, 0, bytes.Length);
 
                 if (!waitForResponse)
                     return null;

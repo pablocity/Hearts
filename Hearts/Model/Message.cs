@@ -16,6 +16,7 @@ namespace Hearts.Model
         YouDeal, //informs player that he is dealing in this round
         ShowCards, //it shows updated cards in hand
         ShowPot, //it shows current pot of cards
+        ShowStats,
         Error //shows an error that occured
     }
 
@@ -40,7 +41,7 @@ namespace Hearts.Model
             if (card != null)
                 CardsRequested.AddRange(card);
 
-            if (request == MessageType.YourTurn)
+            if (request == MessageType.YourTurn && CardsRequested.Count > 0)
             {
                 Suit = card[0].Suit;
             }

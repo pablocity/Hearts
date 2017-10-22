@@ -22,7 +22,13 @@ namespace Hearts.Server
         }
         public List<ClientHandler> Players { get; set; }
 
-        private ClientHandler dealer;
+        private ClientHandler dealer
+        {
+            get
+            {
+                return Players[0];
+            }
+        }
 
         private static Deck deck;
 
@@ -70,7 +76,7 @@ namespace Hearts.Server
                     {
                         for (int j = 0; j < Players[i].PlayerStats.Hand.Count; j++)
                         {
-                            if (c == Players[i].PlayerStats.Hand[j])
+                            if (c.Equals(Players[i].PlayerStats.Hand[j]))
                                 Players[i].PlayerStats.Hand.Remove(Players[i].PlayerStats.Hand[j]);
                         }
                     }
@@ -96,10 +102,15 @@ namespace Hearts.Server
 
                 await PlayFirstRound();
 
-                //while (!isEnd)
-                //{
-
-                //}
+                int x = 0;
+                while (!isEnd)
+                {
+                    x++;
+                    Console.WriteLine($"New round: {x}");
+                    //await UpdatePlayersStats();
+                    await PlayRound();
+                    
+                }
 
 
             }
@@ -116,56 +127,36 @@ namespace Hearts.Server
             foreach (ClientHandler cl in Players)
             {
                 Message clientCard = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Two)));
-                cl.PlayerStats.CurrentCard = clientCard.CardsRequested[0];
+                
+                cl.PlayerStats.CurrentCard = clientCard.CardsRequested.Count > 0 ? clientCard.CardsRequested[0] : null;
             }
+            Console.WriteLine("Play first round there should be no two of clubs");
+            UpdateQueueOrder(true);
 
-            //int starterIndex = -1;
-
-            //List<ClientHandler> temporary = new List<ClientHandler>();
-
-            //for (int i = 0; i < Players.Count; i++)
-            //{
-            //    if (Players[i].PlayerStats.CurrentCard != null &&
-            //        Players[i].PlayerStats.CurrentCard.Value == Values.Two &&
-            //        Players[i].PlayerStats.CurrentCard.Suit == Suits.Clubs)
-            //    {
-            //        starterIndex = i;
-            //        break;
-            //    }
-
-            //    if (starterIndex < i)
-            //        temporary.Add(Players[i]);
-            //}
-
-            //if (temporary.Count > 0)
-            //{
-            //    Players.RemoveRange(0, temporary.Count);
-            //    Players.AddRange(temporary);
-            //    temporary = null;
-            //}
-
-            //dealer = Players[0];
-
-
-            UpdateQueueOrder((c) => { if (c != null && c.Value == Values.Two && c.Suit == Suits.Clubs) return true; else return false; });
-
+            //TODO showCards after assigning CurrentCard to update hand if neccessary
+            await PlayRound(true);
 
         }
 
 
         //TODO check if player has to give two of clubs
 
-        private async void PlayRound()
+        private async Task PlayRound(bool firstRound = false)
         {
-            if (dealer != Players[0])
-                dealer = Players[0];
+            //if (dealer != Players[0])
+            //    dealer = Players[0];
 
 
-            //TODO check if HeartsAllowed has changed
-            Message dealCard = await dealer.SendData(new Message(MessageType.YouDeal, null, null));
-            dealer.PlayerStats.CurrentCard = dealCard.CardsRequested[0];
+            Message dealCard = null;
 
-            await UpdateCards(UpdateContent.Pot);
+            if (!firstRound)
+            {
+                //TODO check if HeartsAllowed has changed
+                dealCard = await dealer.SendData(new Message(MessageType.YouDeal, null, null));
+                dealer.PlayerStats.CurrentCard = dealCard.CardsRequested[0];
+                await UpdateCards(UpdateContent.Pot);
+            }
+
 
             for (int i = 1; i < Players.Count; i++)
             {
@@ -177,7 +168,7 @@ namespace Hearts.Server
 
             //Some kind of timer to delay collecting last pot
 
-            Assess();
+            UpdateQueueOrder(false);
 
         }
 
@@ -197,7 +188,7 @@ namespace Hearts.Server
                 if (p.Suit == cardDealt.Suit)
                 {
                     Card[] temp = { p, max };
-                    max = temp.Max();
+                    max = temp.Where(x => x.Value == temp.Max(y => y.Value)).ToArray()[0];
                 }
             }
 
@@ -206,6 +197,9 @@ namespace Hearts.Server
                 if (cl.PlayerStats.CurrentCard.Equals(max))
                 {
                     cl.PlayerStats.garbage.AddRange(pot);
+
+                    //cl.SendData(new Message(MessageType.ShowStats, cl.PlayerStats, null), false);
+
                     return cl.PlayerStats.CurrentCard;
                 }
             }
@@ -214,26 +208,35 @@ namespace Hearts.Server
 
         }
 
-        private void UpdateQueueOrder(Predicate<Card> condition)
+        private void UpdateQueueOrder(bool firstRound)
         {
-            //int starterIndex = -1;
 
             List<ClientHandler> temporary = new List<ClientHandler>();
 
+            Card bestCard = firstRound ? null : Assess();
+
+            
+
             for (int i = 0; i < Players.Count; i++)
             {
-                //if (Players[i].PlayerStats.CurrentCard != null &&
-                //    Players[i].PlayerStats.CurrentCard.Value == Values.Two &&
-                //    Players[i].PlayerStats.CurrentCard.Suit == Suits.Clubs)
-                //{
-                //    starterIndex = i;
-                //    break;
-                //}
+                if (firstRound)
+                {
+                    if (Players[i].PlayerStats.CurrentCard != null &&
+                        Players[i].PlayerStats.CurrentCard.Value == Values.Two &&
+                        Players[i].PlayerStats.CurrentCard.Suit == Suits.Clubs)
 
-                if (condition(Players[i].PlayerStats.CurrentCard))
-                    break;
+                        break;
+                }
+                else
+                {
+                    if (Players[i].PlayerStats.CurrentCard.Equals(bestCard))
+                        break;
+                }
 
                 temporary.Add(Players[i]);
+
+                //TODO check if works
+                Players[i].PlayerStats.CurrentCard = null;
             }
 
             if (temporary.Count > 0)
@@ -243,7 +246,7 @@ namespace Hearts.Server
                 temporary = null;
             }
 
-            dealer = Players[0];
+            //dealer = Players[0];
             //TODO set dealer
         }
 
@@ -262,7 +265,7 @@ namespace Hearts.Server
                 if (toUpdate == UpdateContent.Hand)
                     await cl.SendData(new Message(MessageType.ShowCards, null, cl.PlayerStats.Hand.ToArray()), false);
                 else if (toUpdate == UpdateContent.Pot)
-                    await cl.SendData(new Message(MessageType.ShowPot, null, Pot().ToArray()), false);
+                    await cl.SendData(new Message(MessageType.ShowPot, cl.PlayerStats, Pot().ToArray()), false);
                 else
                 {
                     await UpdateCards(UpdateContent.Hand);
@@ -273,13 +276,26 @@ namespace Hearts.Server
             }
         }
 
+        private async Task UpdatePlayersStats()
+        {
+            foreach (ClientHandler cl in Players)
+            {
+                //TODO check if works
+                await cl.SendData(new Message(MessageType.ShowStats, cl.PlayerStats, null), false);
+            }
+        }
+
         private IEnumerable<Card> Pot()
         {
-            Card[] cards = new Card[Players.Count];
+            List<Card> cards = new List<Card>();
+            Card currentCard;
 
             for (int i = 0; i < Players.Count; i++)
             {
-                cards[0] = Players[i].PlayerStats.CurrentCard;
+                currentCard = Players[i].PlayerStats.CurrentCard;
+
+                if (currentCard != null)
+                    cards.Add(currentCard);
             }
 
             return cards;

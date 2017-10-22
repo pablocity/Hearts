@@ -91,29 +91,34 @@ namespace Hearts.Model
 
         public override bool Equals(object obj)
         {
-            Card card = obj is Card ? obj as Card : null;
+            //Card card = obj is Card ? obj as Card : null;
+            Card card = obj as Card;
+            
 
-            if (card != null && Name == card.Name)
+            if (Object.ReferenceEquals(card, null) || Object.ReferenceEquals(this, null))
+                return false;
+
+            if (this.Name == card.Name)
                 return true;
             else
                 return false;
         }
 
-        public static bool operator ==(Card c1, Card c2)
-        {
-            if (c1.Equals(c2))
-                return true;
-            else
-                return false;
-        }
+        //public static bool operator ==(Card c1, Card c2)
+        //{
+        //    if (c1.Equals(c2))
+        //        return true;
+        //    else
+        //        return false;
+        //}
 
-        public static bool operator !=(Card c1, Card c2)
-        {
-            if (!c1.Equals(c2))
-                return true;
-            else
-                return false;
-        }
+        //public static bool operator !=(Card c1, Card c2)
+        //{
+        //    if (!c1.Equals(c2))
+        //        return true;
+        //    else
+        //        return false;
+        //}
 
         public override int GetHashCode()
         {

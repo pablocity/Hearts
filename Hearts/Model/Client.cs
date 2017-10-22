@@ -120,22 +120,6 @@ namespace Hearts.Model
 
                 Messenger.Default.Send<Message>(serverRequest);
 
-                //switch (serverRequest.Request)
-                //{
-                //    case MessageType.CardRequest:
-                //        Messenger.Default.Send<Message>(serverRequest);
-                //        return await ViewModelLocator.clientViewModel.SelectCard(serverRequest);
-                //    case MessageType.ShowCards:
-                //        Messenger.Default.Send<Message>(serverRequest);
-                //        return null;
-                //    case MessageType.PassOn:
-                //        return await ViewModelLocator.clientViewModel.PassOn();
-                //    default:
-                //        Error("Wrong suited case!");
-                //        break;
-                //}
-
-                //return response;
             }
             catch (Exception ex)
             {
