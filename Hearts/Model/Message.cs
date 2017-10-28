@@ -25,7 +25,7 @@ namespace Hearts.Model
         public MessageType Request { get; private set; }
         public List<Card> CardsRequested { get; private set; }
 
-        public Player PlayerStats { get; private set; }
+        public Player PlayerStats { get; set; }
 
         public Suits? Suit { get; private set; } = null;
 

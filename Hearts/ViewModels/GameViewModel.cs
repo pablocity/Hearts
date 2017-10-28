@@ -15,11 +15,11 @@ namespace Hearts.ViewModels
     {
         //Game instance
 
-        public bool Ready = false;
-
         public Player Stats;
 
         private Message serverOrder;
+
+        private bool heartsChanged = false;
 
         Client clientInstance;
         public Client ClientInstance
@@ -100,8 +100,8 @@ namespace Hearts.ViewModels
                     break;
                 case MessageType.ShowPot:
                     Inform($"Pot contains: {serverOrder.CardsRequested}");
-                    Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     ShowPot(serverOrder.CardsRequested);
+                    Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     break;
                 case MessageType.YouDeal:
                     Inform($"You deal now!");
@@ -110,7 +110,7 @@ namespace Hearts.ViewModels
                     Inform("Your turn now!");
                     break;
                 case MessageType.ShowStats:
-                    Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
+                    //Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     break;
             }
         }
@@ -149,7 +149,21 @@ namespace Hearts.ViewModels
             if (serverOrder.Request == MessageType.YouDeal)
             {
                 if (selectedCard.Suit == Suits.Hearts && !serverOrder.HeartsAllowed)
-                    return false;
+                {
+                    foreach (Card c in Stats.Hand)
+                    {
+                        if (c.Suit != Suits.Hearts)
+                        {
+                            Inform("Nie możesz jeszcze tego wyłożyć, gdyż posiadasz inne kolory a nikt wcześniej nie zagrał serca!");
+                            return false;
+                        }
+                        
+                    }
+
+                    heartsChanged = true;
+
+                    return true;
+                }
 
                 return true;
             }
@@ -189,10 +203,11 @@ namespace Hearts.ViewModels
                         }
                     }
 
-                    if (selectedCard.Suit == Suits.Hearts && !serverOrder.HeartsAllowed)
+                    if (!serverOrder.HeartsAllowed)
                     {
-                        Inform("Nie możesz jeszcze wyłożyć serc!");
-                        return false;
+                        Inform("Pierwsze wyłożenie serca!");
+                        heartsChanged = true;
+                        return true;
                     }
 
                     return true;
@@ -232,9 +247,14 @@ namespace Hearts.ViewModels
             {
                 MessageType responseType = serverOrder.Request == MessageType.YouDeal ? MessageType.YouDeal : MessageType.YourTurn;
                 Inform($"Karta wysłana: {Stats.SelectedCards[0]}");
-                clientInstance.SendData(new Message(responseType, null, Stats.SelectedCards[0]));
+
+                Message toSend = new Message(responseType, null, Stats.SelectedCards[0])
+                {
+                    HeartsAllowed = heartsChanged
+                };
+
+                clientInstance.SendData(toSend);
                 Stats.Hand.Remove(Stats.SelectedCards[0]);
-                //TODO check if removing works
                 CardsInHand = new ObservableCollection<Card>(Stats.Hand);
             }
             else

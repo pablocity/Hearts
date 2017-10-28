@@ -44,7 +44,7 @@ namespace Hearts.Server
                 {
                     listener.Start();
                     //TODO remove test case
-                    while (clients.Count < 2)
+                    while (clients.Count < 3)
                     {
                         clientNumber++;
 
@@ -80,7 +80,7 @@ namespace Hearts.Server
 
             foreach (ClientHandler cl in clients)
             {
-                Message m = await cl.SendSth();
+                Message m = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Eight)));
                 messages.Add($"{m.CardsRequested[0]}\n{m.Request.ToString()}\n");
             }
 

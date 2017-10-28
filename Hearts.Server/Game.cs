@@ -94,7 +94,7 @@ namespace Hearts.Server
                         Players[index].PlayerStats.Hand.AddRange(response.CardsRequested);
                     }
 
-                    await Players[i].SendData(new Message(MessageType.ShowCards, /*Players[i].PlayerStats*/null, Players[i].PlayerStats.Hand.ToArray()), false);
+                    await Players[i].SendData(new Message(MessageType.ShowCards, null, Players[i].PlayerStats.Hand.ToArray()), false);
 
                 }
                 //TODO REFACTOR
@@ -126,6 +126,7 @@ namespace Hearts.Server
         {
             foreach (ClientHandler cl in Players)
             {
+                //REMOVE player's stats from message
                 Message clientCard = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Two)));
                 
                 cl.PlayerStats.CurrentCard = clientCard.CardsRequested.Count > 0 ? clientCard.CardsRequested[0] : null;
@@ -152,7 +153,20 @@ namespace Hearts.Server
             if (!firstRound)
             {
                 //TODO check if HeartsAllowed has changed
-                dealCard = await dealer.SendData(new Message(MessageType.YouDeal, null, null));
+                Message toSend = new Message(MessageType.YouDeal, null, null)
+                {
+                    HeartsAllowed = Game.HeartsAllowed
+                };
+
+                dealCard = await dealer.SendData(toSend);
+
+                //REFACTOR
+
+                foreach (ClientHandler cl in Players)
+                {
+                    cl.PlayerStats.CurrentCard = null;
+                }
+
                 dealer.PlayerStats.CurrentCard = dealCard.CardsRequested[0];
                 await UpdateCards(UpdateContent.Pot);
             }
@@ -160,7 +174,12 @@ namespace Hearts.Server
 
             for (int i = 1; i < Players.Count; i++)
             {
-                dealCard = await Players[i].SendData(new Message(MessageType.YourTurn, null, dealer.PlayerStats.CurrentCard));
+                Message toSend = new Message(MessageType.YourTurn, null, dealer.PlayerStats.CurrentCard)
+                {
+                    HeartsAllowed = Game.HeartsAllowed
+                };
+
+                dealCard = await Players[i].SendData(toSend);
                 Players[i].PlayerStats.CurrentCard = dealCard.CardsRequested[0];
 
                 await UpdateCards(UpdateContent.Pot);

@@ -28,11 +28,6 @@ namespace Hearts.Server
 
         }
 
-        public async Task<Message> SendSth()
-        {
-            /*Message clientResponse = */return await SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Ace)));
-        }
-
         public async Task<Message> SendData(Message messageObject, bool waitForResponse = true)
         {
 
@@ -66,6 +61,9 @@ namespace Hearts.Server
                         {
                             JToken.Parse(clientMsg); // if string isn't JSON throws an exception
                             response = JsonConvert.DeserializeObject<Message>(clientMsg);
+
+                            if (!Game.HeartsAllowed && response.HeartsAllowed)
+                                Game.HeartsAllowed = true;
 
                             endFlag = (response.Request == messageObject.Request); //Checks if response message type is the same as it was in sent data
                         }
