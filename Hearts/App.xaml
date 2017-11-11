@@ -4,7 +4,12 @@
              xmlns:local="clr-namespace:Hearts"
              StartupUri="Views/LobbyView.xaml">
     <Application.Resources>
-        <BitmapImage DecodePixelWidth="55" DecodePixelHeight="80" x:Key="card" UriSource="/Resources/Two of Diamonds.png"></BitmapImage>
+        <BitmapImage x:Key="table" UriSource="/Resources/Table_BG.png"></BitmapImage>
         <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
+        <Style x:Key="headerStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Margin" Value="5, 1, 0, 1"></Setter>
+            <Setter Property="FontFamily" Value="CourierNew"></Setter>
+            <Setter Property="Background" Value="LightGray"></Setter>
+        </Style>
     </Application.Resources>
 </Application>

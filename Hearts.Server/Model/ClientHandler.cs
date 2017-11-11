@@ -65,6 +65,9 @@ namespace Hearts.Server
                             if (!Game.HeartsAllowed && response.HeartsAllowed)
                                 Game.HeartsAllowed = true;
 
+                            if (response.PlayerStats != null)
+                                this.PlayerStats.Hand = response.PlayerStats.Hand;
+
                             endFlag = (response.Request == messageObject.Request); //Checks if response message type is the same as it was in sent data
                         }
                         catch (Exception ex)

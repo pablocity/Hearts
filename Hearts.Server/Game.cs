@@ -109,9 +109,18 @@ namespace Hearts.Server
                     Console.WriteLine($"New round: {x}");
                     //await UpdatePlayersStats();
                     await PlayRound();
+
+                    ClientHandler winner = CheckIfOver();
+
+                    if (winner != null)
+                    {
+                        isEnd = true;
+                        await winner.SendData(new Message(MessageType.Win, null, null), false);
+                    }
                     
                 }
 
+                Console.WriteLine("KONIEC GRY!");
 
             }
             catch (Exception ex)
@@ -121,6 +130,22 @@ namespace Hearts.Server
 
         }
 
+
+        private ClientHandler CheckIfOver()
+        {
+            if (Players[0].PlayerStats.Hand.Count <= 0)
+            {
+                Dictionary<ClientHandler, int> maxPoints = new Dictionary<ClientHandler, int>();
+                foreach (ClientHandler cl in Players)
+                {
+                    maxPoints.Add(cl, cl.PlayerStats.Points);
+                }
+
+                return maxPoints.FirstOrDefault(x => x.Value == maxPoints.Values.Min()).Key;
+            }
+            else
+                return null;
+        }
 
         private async Task PlayFirstRound()
         {
@@ -134,7 +159,6 @@ namespace Hearts.Server
             Console.WriteLine("Play first round there should be no two of clubs");
             UpdateQueueOrder(true);
 
-            //TODO showCards after assigning CurrentCard to update hand if neccessary
             await PlayRound(true);
 
         }
@@ -144,15 +168,11 @@ namespace Hearts.Server
 
         private async Task PlayRound(bool firstRound = false)
         {
-            //if (dealer != Players[0])
-            //    dealer = Players[0];
-
 
             Message dealCard = null;
 
             if (!firstRound)
             {
-                //TODO check if HeartsAllowed has changed
                 Message toSend = new Message(MessageType.YouDeal, null, null)
                 {
                     HeartsAllowed = Game.HeartsAllowed

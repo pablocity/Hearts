@@ -44,7 +44,7 @@ namespace Hearts.Server
                 {
                     listener.Start();
                     //TODO remove test case
-                    while (clients.Count < 3)
+                    while (clients.Count < 2)
                     {
                         clientNumber++;
 

@@ -8,9 +8,37 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource viewModelLocator}, Path=clientViewModel}"
-        Title="Hearts - client" Height="350" Width="551.355">
-    <Grid>
-        <ListView ItemsSource="{Binding Path=CardsInHand}" Background="LightGray" x:Name="handCards" Margin="10,210,10,10" HorizontalContentAlignment="Stretch">
+        Title="Hearts - client" Height="400" Width="754.355"
+        >
+
+
+
+    <Grid Background=" #3498db ">
+
+        <!--<Grid.Background>
+            <ImageBrush ImageSource="C:\Users\Paweł\Documents\Visual Studio 2017\Projects\Hearts\Hearts\Resources\Table_BG.png"></ImageBrush>
+        </Grid.Background>-->
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="3.5*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ListView ItemsSource="{Binding Path=CardsInHand}"
+                  Grid.ColumnSpan="3"
+                  Grid.Row="2"
+                  Background="Transparent" BorderThickness="0" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                  VerticalContentAlignment="Stretch" Margin="10, 0, 10, 0"
+                  x:Name="handCards">
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -22,9 +50,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="110">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="85">
 
-                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="110" VerticalAlignment="Center" Width="75"/>
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="85" VerticalAlignment="Center" Width="70"/>
 
 
                         </StackPanel>
@@ -41,39 +69,78 @@
 
         </ListView>
         <Button Content="Przekaż karty" Command="{Binding Path=passCards}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
-        <ListView ItemsSource="{Binding Messages}" Background="LightGray" x:Name="cardsPot" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Margin="126,10,133,0" HorizontalAlignment="Center" Width="284" Height="195">
-
-            <!--<i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    -->
-            <!--<i:InvokeCommandAction Command="{Binding Path=selectCard}" CommandParameter="{Binding ElementName=handCards, Path=SelectedItem}"></i:InvokeCommandAction>-->
-            <!--
-                    <command:EventToCommand Command="{Binding selectCard}" CommandParameter="{Binding SelectedItem, ElementName=handCards}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+        <ListView ItemsSource="{Binding Pot}"
+                  Grid.Column="1"
+                  Grid.Row="1"
+                  Background="Transparent" BorderThickness="0" 
+                  x:Name="cardsPot" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  Width="284" Height="104">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="110">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="85">
 
-                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="110" VerticalAlignment="Center" Width="75"/>
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="85" VerticalAlignment="Center" Width="70"/>
 
 
                         </StackPanel>
                     </Grid>
 
                 </DataTemplate>
-            </ListView.ItemTemplate>-->
+            </ListView.ItemTemplate>
 
-            <!--<ListView.ItemsPanel>
+            <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
-            </ListView.ItemsPanel>-->
+            </ListView.ItemsPanel>
 
         </ListView>
         <Button Content="Zatwierdź kartę" Command="{Binding sendCard}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
+
+
+        <Grid x:Name="InfoGrid"
+              Grid.Column="3" Grid.RowSpan="3"
+              Background=" #48c9b0 ">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.5*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+
+            </Grid.RowDefinitions>
+
+            <Label Content="Serwer nr.1"
+                   FontFamily="CourierNew"
+                   FontSize="15"
+                   FontStyle="Oblique"
+                   Margin="5">
+
+            </Label>
+
+            <!--"{Binding ElementName=InfoGrid, Path=RowDefinitions[2].ActualHeight}"-->
+                <ListView ItemsSource="{Binding Messages}"
+                      Grid.Row="2"    
+                      Background="WhiteSmoke"
+                      VerticalAlignment="Top" Margin="10, 5, 10, 5"
+                      Height="150">
+
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Wiadomości od serwera"></GridViewColumn>
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+
+
+
+        </Grid>
 
     </Grid>
 </Window>

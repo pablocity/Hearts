@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using Hearts.Model;
 using System.Collections.ObjectModel;
 
@@ -17,7 +18,7 @@ namespace Hearts.ViewModels
 
         public Player Stats;
 
-        private Message serverOrder;
+        private Message serverOrder = null;
 
         private bool heartsChanged = false;
 
@@ -48,6 +49,20 @@ namespace Hearts.ViewModels
             }
         }
 
+        private ObservableCollection<Card> pot;
+        public ObservableCollection<Card> Pot
+        {
+            get
+            {
+                return pot;
+            }
+            private set
+            {
+                pot = value;
+                RaisePropertyChanged(() => Pot);
+            }
+        }
+
         private ObservableCollection<string> messages;
         public ObservableCollection<string> Messages
         {
@@ -70,10 +85,27 @@ namespace Hearts.ViewModels
         {
             
             Stats = new Player("");
+            Pot = new ObservableCollection<Card>();
             Messages = new ObservableCollection<string>();
             cardsInHand = new ObservableCollection<Card>();
-            passCards = new RelayCommand(PassOn);
-            sendCard = new RelayCommand(SendCard);
+
+            passCards = new RelayCommand(PassOn, () =>
+            {
+                if (serverOrder != null && serverOrder.Request == MessageType.PassOn)
+                    return true;
+                else
+                    return false;
+            });
+
+            sendCard = new RelayCommand(SendCard, () =>
+            {
+                if (serverOrder != null && (serverOrder.Request == MessageType.YourTurn || serverOrder.Request == MessageType.YouDeal))
+                    return true;
+                else
+                    return false;
+            });
+
+
             selectCard = new RelayCommand<Card>(Select);
 
             Messenger.Default.Register<Message>(this, RetrieveMessage);
@@ -85,6 +117,12 @@ namespace Hearts.ViewModels
             
             //Messages.Add("Client configured");
             serverOrder = serverRequest;
+            
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                passCards.RaiseCanExecuteChanged();
+                sendCard.RaiseCanExecuteChanged();
+            });
 
             switch (serverRequest.Request)
             {
@@ -112,7 +150,11 @@ namespace Hearts.ViewModels
                 case MessageType.ShowStats:
                     //Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     break;
+                case MessageType.Win:
+                    Inform("Brawo, wygrałeś!");
+                    break;
             }
+
         }
 
 
@@ -134,13 +176,15 @@ namespace Hearts.ViewModels
 
         public void ShowPot(IEnumerable<Card> pot)
         {
-            List<string> names = new List<string>();
+            //List<string> names = new List<string>();
 
-            foreach (Card c in pot)
-            {
-                names.Add(c.Name);
-            }
-            Messages = new ObservableCollection<string>(names);
+            //foreach (Card c in pot)
+            //{
+            //    names.Add(c.Name);
+            //}
+            //Messages = new ObservableCollection<string>(names);
+
+            Pot = new ObservableCollection<Card>(pot);
         }
 
         private bool CheckSelectedCard(Card selectedCard)
@@ -247,8 +291,9 @@ namespace Hearts.ViewModels
             {
                 MessageType responseType = serverOrder.Request == MessageType.YouDeal ? MessageType.YouDeal : MessageType.YourTurn;
                 Inform($"Karta wysłana: {Stats.SelectedCards[0]}");
-
-                Message toSend = new Message(responseType, null, Stats.SelectedCards[0])
+                Stats.Hand.Remove(Stats.SelectedCards[0]);
+                //TODO Check if sending playerStats doesn't spoil anything
+                Message toSend = new Message(responseType, Stats, Stats.SelectedCards[0])
                 {
                     HeartsAllowed = heartsChanged
                 };

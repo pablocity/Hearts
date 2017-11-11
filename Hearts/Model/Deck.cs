@@ -15,7 +15,7 @@ namespace Hearts.Model
 
         public Deck()
         {
-            for (int i = 0; i < Enum.GetNames(typeof(Values)).Length; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(Values)).Length/5; i++)
             {
                 for (int j = 0; j < Enum.GetNames(typeof(Suits)).Length; j++)
                 {

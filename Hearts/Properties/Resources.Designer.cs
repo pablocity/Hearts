@@ -463,6 +463,16 @@ namespace Hearts.Properties {
         /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Table_BG {
+            get {
+                object obj = ResourceManager.GetObject("Table_BG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Ten_of_Clubs {
             get {
                 object obj = ResourceManager.GetObject("Ten_of_Clubs", resourceCulture);
