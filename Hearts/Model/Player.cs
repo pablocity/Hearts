@@ -8,13 +8,15 @@ namespace Hearts.Model
 {
     public class Player
     {
-        public string Name;
+
+        public bool PassOrSelect;
+
         public List<Card> Hand;
         public List<Card> SelectedCards;
-        public bool PassOrSelect;
-        public bool IsDealer = false;
-        public List<Card> garbage;
-        //TODO finish token, wysyłany jako messagae object w celu powiadmoienia serwera o zakończeniu pojedynczego zleconego zadania
+        public List<Card> Garbage;
+        //public bool IsDealer = false;
+
+        public string Name { get; private set; }
 
 
         private Card currentCard;
@@ -32,18 +34,17 @@ namespace Hearts.Model
             }
         }
 
-
+        // Points amount based on number of garbage cards
         private int points;
         public int Points
         {
             get
             {
-                //TODO jeśli ilość kart jest taka sama nie sprawdzaj
-                if (garbage != null && garbage.Count > 0)
+                if (Garbage != null && Garbage.Count > 0)
                 {
                     points = 0;
 
-                    foreach (Card card in garbage)
+                    foreach (Card card in Garbage)
                     {
                         points += card.Points;
                     }
@@ -55,12 +56,13 @@ namespace Hearts.Model
 
         public Player(string name)
         {
-            garbage = new List<Card>();
+            Garbage = new List<Card>();
             PassOrSelect = true;
             Hand = new List<Card>();
             SelectedCards = new List<Card>();
             Name = name;
         }
+
 
         public Card SelectCard(int index)
         {

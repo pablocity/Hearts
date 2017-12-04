@@ -9,10 +9,10 @@ namespace Hearts.Server
 {
     public class Game
     {
+        public List<ClientHandler> Players { get; set; }
 
         public static bool HeartsAllowed = false;
 
-        private static readonly Game instance = new Game();
         public static Game Instance
         {
             get
@@ -20,7 +20,9 @@ namespace Hearts.Server
                 return instance;
             }
         }
-        public List<ClientHandler> Players { get; set; }
+
+
+        private static readonly Game instance = new Game();
 
         private ClientHandler dealer
         {
@@ -30,6 +32,7 @@ namespace Hearts.Server
             }
         }
 
+        private bool isEnd = false;
         private static Deck deck;
 
         static Game()
@@ -41,9 +44,8 @@ namespace Hearts.Server
             
         }
 
-        bool isEnd = false;
 
-        public async void StartGame()
+        public async Task StartGame()
         {
             deck.Shuffle();
             //TODO remove test case
@@ -106,8 +108,9 @@ namespace Hearts.Server
                 while (!isEnd)
                 {
                     x++;
+                    // Test log
                     Console.WriteLine($"New round: {x}");
-                    //await UpdatePlayersStats();
+                    //
                     await PlayRound();
 
                     ClientHandler winner = CheckIfOver();
@@ -131,6 +134,7 @@ namespace Hearts.Server
         }
 
 
+        // Returns a winner if any
         private ClientHandler CheckIfOver()
         {
             if (Players[0].PlayerStats.Hand.Count <= 0)
@@ -156,8 +160,14 @@ namespace Hearts.Server
                 
                 cl.PlayerStats.CurrentCard = clientCard.CardsRequested.Count > 0 ? clientCard.CardsRequested[0] : null;
             }
+
+            //TODO check if works
+            await UpdateCards(UpdateContent.Pot);
+
+            // Test log
             Console.WriteLine("Play first round there should be no two of clubs");
-            UpdateQueueOrder(true);
+            //
+            await UpdateQueueOrder(true);
 
             await PlayRound(true);
 
@@ -189,6 +199,7 @@ namespace Hearts.Server
 
                 dealer.PlayerStats.CurrentCard = dealCard.CardsRequested[0];
                 await UpdateCards(UpdateContent.Pot);
+                //await UpdatePlayersStats();
             }
 
 
@@ -207,13 +218,14 @@ namespace Hearts.Server
 
             //Some kind of timer to delay collecting last pot
 
-            UpdateQueueOrder(false);
+            await UpdateQueueOrder(false);
 
         }
 
+
+        //Assessing pot, returns winning card
         private Card Assess()
         {
-            //TODO call UpdateQueueOrder somewhere
             Card cardDealt = dealer.PlayerStats.CurrentCard;
             Card max = cardDealt;
 
@@ -235,7 +247,7 @@ namespace Hearts.Server
             {
                 if (cl.PlayerStats.CurrentCard.Equals(max))
                 {
-                    cl.PlayerStats.garbage.AddRange(pot);
+                    cl.PlayerStats.Garbage.AddRange(pot);
 
                     //cl.SendData(new Message(MessageType.ShowStats, cl.PlayerStats, null), false);
 
@@ -247,14 +259,14 @@ namespace Hearts.Server
 
         }
 
-        private void UpdateQueueOrder(bool firstRound)
+        private async Task UpdateQueueOrder(bool firstRound)
         {
 
             List<ClientHandler> temporary = new List<ClientHandler>();
 
             Card bestCard = firstRound ? null : Assess();
 
-            
+            await UpdatePlayersStats();
 
             for (int i = 0; i < Players.Count; i++)
             {
@@ -285,8 +297,6 @@ namespace Hearts.Server
                 temporary = null;
             }
 
-            //dealer = Players[0];
-            //TODO set dealer
         }
 
 
@@ -310,7 +320,6 @@ namespace Hearts.Server
                     await UpdateCards(UpdateContent.Hand);
                     await UpdateCards(UpdateContent.Pot);
                 }
-                //TODO remember aobut disabling response in showCards message
 
             }
         }

@@ -8,16 +8,12 @@
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource viewModelLocator}, Path=clientViewModel}"
-        Title="Hearts - client" Height="400" Width="754.355"
+        Title="Hearts - client" Height="410" Width="755" Icon="pack://siteoforigin:,,,/Resources/cards.png"
         >
 
 
 
     <Grid Background=" #3498db ">
-
-        <!--<Grid.Background>
-            <ImageBrush ImageSource="C:\Users\Paweł\Documents\Visual Studio 2017\Projects\Hearts\Hearts\Resources\Table_BG.png"></ImageBrush>
-        </Grid.Background>-->
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.5*"></ColumnDefinition>
@@ -33,11 +29,12 @@
         </Grid.RowDefinitions>
 
         <ListView ItemsSource="{Binding Path=CardsInHand}"
+                  ItemContainerStyle="{StaticResource selectStyle}"
                   Grid.ColumnSpan="3"
                   Grid.Row="2"
-                  Background="Transparent" BorderThickness="0" 
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                  VerticalContentAlignment="Stretch" Margin="10, 0, 10, 0"
+                  Background="Gray" BorderThickness="0" BorderBrush="Crimson"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                  VerticalContentAlignment="Stretch" Margin="3, 0, 3, 3"
                   x:Name="handCards">
 
             <i:Interaction.Triggers>
@@ -50,10 +47,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="85">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Height="80">
 
-                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="85" VerticalAlignment="Center" Width="70"/>
-
+                            <Image Source="{Binding ImgString}" HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="70"/>
 
                         </StackPanel>
                     </Grid>
@@ -66,17 +62,22 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch"></StackPanel>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
+            
 
         </ListView>
+        
         <Button Content="Przekaż karty" Command="{Binding Path=passCards}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
+        
         <ListView ItemsSource="{Binding Pot}"
                   Grid.Column="1"
                   Grid.Row="1"
                   Background="Transparent" BorderThickness="0" 
                   x:Name="cardsPot" 
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  Width="284" Height="104">
+                  Width="Auto" Height="Auto">
 
+            <!--Width="284" Height="104"-->
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -97,6 +98,13 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
 
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Focusable" Value="False"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            
+            
         </ListView>
         <Button Content="Zatwierdź kartę" Command="{Binding sendCard}" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="80" Height="26"/>
 
@@ -141,6 +149,10 @@
 
 
         </Grid>
-
+        
+        <Label Content="{Binding HelpInfo}" FontFamily="Courier New" FontSize="17" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
+        <Label Content="{Binding Points}" FontFamily="Courier New" FontSize="17" Margin="20, 0, 0, 0" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center"/>
+        <Label Content="Points" FontFamily="Courier New" FontSize="17" Margin="15, 0, 0, 0" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left"/>
+        
     </Grid>
 </Window>

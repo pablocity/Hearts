@@ -27,7 +27,7 @@ namespace Hearts.Server
 
         }
 
-        public async void StartServerAsync(string ipAdress, int portNumber)
+        public async Task StartServerAsync(string ipAdress, int portNumber)
         {
 
             try
@@ -55,7 +55,7 @@ namespace Hearts.Server
                         clients.Add(handler);
                     }
 
-                    StartGameAsync();
+                    await StartGameAsync();
 
                 });
 
@@ -67,11 +67,10 @@ namespace Hearts.Server
 
         }
 
-        public void StartGameAsync()
+        public async Task StartGameAsync()
         {
             Game.Instance.Players = clients;
-            Game.Instance.StartGame();
-            Error("Game started but not implemented!");
+            await Game.Instance.StartGame();
         }
 
         public async Task<List<string>> SendMessage()
@@ -80,8 +79,8 @@ namespace Hearts.Server
 
             foreach (ClientHandler cl in clients)
             {
-                Message m = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Eight)));
-                messages.Add($"{m.CardsRequested[0]}\n{m.Request.ToString()}\n");
+                Message message = await cl.SendData(new Message(MessageType.CardRequest, null, new Card(Suits.Clubs, Values.Eight)));
+                messages.Add($"{message.CardsRequested[0]}\n{message.Request.ToString()}\n");
             }
 
             return messages;

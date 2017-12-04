@@ -48,7 +48,6 @@ namespace Hearts.Model
 
         }
 
-        //TODO dodać ToString()
         public override string ToString()
         {
 

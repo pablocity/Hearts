@@ -11,5 +11,10 @@
             <Setter Property="FontFamily" Value="CourierNew"></Setter>
             <Setter Property="Background" Value="LightGray"></Setter>
         </Style>
+
+        <Style x:Key="selectStyle" TargetType="{x:Type ListViewItem}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+        </Style>
+
     </Application.Resources>
 </Application>

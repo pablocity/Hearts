@@ -12,7 +12,7 @@ namespace Hearts.Model
     //TODO ustawić ikony dla aplikacji
     public class Client
     {
-        TcpClient client;
+        private TcpClient client;
 
         public Client()
         {
@@ -32,7 +32,6 @@ namespace Hearts.Model
             catch (Exception ex)
             {
                 Error(ex.Message);
-                throw new NotImplementedException();
             }
 
         }
@@ -46,14 +45,12 @@ namespace Hearts.Model
                 while (true)
                 {
 
-                    string msg = await ReceiveData(client);
-
-                    //msg = msg.Replace("\0", String.Empty);
+                    string message = await ReceiveData(client);
 
 
-                    if (!String.IsNullOrWhiteSpace(msg) && !String.IsNullOrEmpty(msg))
+                    if (!String.IsNullOrWhiteSpace(message) && !String.IsNullOrEmpty(message))
                     {
-                        ReadMessage(msg);
+                        ReadMessage(message);
 
                         if (response == null)
                             continue;
@@ -61,19 +58,17 @@ namespace Hearts.Model
                         if (client.Connected)
                         {
                             NetworkStream ns = client.GetStream();
-                            msg = JsonConvert.SerializeObject(response);
-                            byte[] byteMsg = new byte[10240];
-                            byteMsg = System.Text.Encoding.ASCII.GetBytes(msg);
+                            message = JsonConvert.SerializeObject(response);
+                            byte[] byteMsg = new byte[15240];
+                            byteMsg = System.Text.Encoding.ASCII.GetBytes(message);
 
                             ns.Write(byteMsg.ToArray(), 0, byteMsg.Length);
                             ns.Flush();
                         }
 
-
-                        //TODO flush stream everywhere after closing app
                     }
 
-                    msg = "";
+                    message = "";
                 }
 
             });
@@ -87,7 +82,7 @@ namespace Hearts.Model
             {
                 NetworkStream data = client.GetStream();
 
-                byte[] byteMsg = new byte[10240];
+                byte[] byteMsg = new byte[15240];
 
                 int i = await data.ReadAsync(byteMsg, 0, (int)client.ReceiveBufferSize);
 
@@ -109,9 +104,8 @@ namespace Hearts.Model
         {
             try
             {
-                //Message response = null;
 
-                JToken.Parse(JSON_Message); //If not JSON throw exception
+                JToken.Parse(JSON_Message); //If not valid JSON throw exception
 
                 Message serverRequest = JsonConvert.DeserializeObject<Message>(JSON_Message);
 

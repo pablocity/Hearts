@@ -10,6 +10,7 @@ namespace Hearts.Sample
 {
     class Program
     {
+        //Utility program to rename card's images files on HDD as it fit the name convention in resources
         static void Main(string[] args)
         {
             Deck deck = new Deck();

@@ -13,9 +13,11 @@ namespace Hearts.Model
         private Random random = new Random();
         public List<Card> cards = new List<Card>();
 
+
+        //TODO remove test case
         public Deck()
         {
-            for (int i = 0; i < Enum.GetNames(typeof(Values)).Length/5; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(Values)).Length; i++)
             {
                 for (int j = 0; j < Enum.GetNames(typeof(Suits)).Length; j++)
                 {
@@ -55,6 +57,8 @@ namespace Hearts.Model
             return card;
         }
 
+
+        // If there are 3 players instead of 4 this method removes one card, thus players have the same amount of cards
         public void RemoveReduntant()
         {
             bool flag = false;
@@ -69,8 +73,7 @@ namespace Hearts.Model
                     cards.RemoveAt(index);
                     flag = true;
                 }
-            }
-            
+            } 
             
         }
     }

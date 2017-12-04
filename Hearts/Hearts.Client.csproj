@@ -77,7 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Client.cs" />
+    <Compile Include="Client\Client.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
@@ -123,6 +123,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -290,6 +291,13 @@
     <Resource Include="Resources\Two of Spades.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\cards.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\server.png" />
+    <None Include="Resources\lobby.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\Table_BG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

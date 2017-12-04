@@ -38,14 +38,14 @@ namespace Hearts.Model
 
     public class Card
     {
-        public Suits Suit;
-        public Values Value;
+        public Suits Suit { get; private set; }
+        public Values Value { get; private set; }
 
-        public int Points;
+        public int Points { get; private set; }
 
-        public string Name;
+        public string Name { get; private set; }
 
-        public bool Replaceable;
+        public bool Replaceable { get; private set; }
 
         public string ImgString { get; private set; }
         
@@ -60,8 +60,6 @@ namespace Hearts.Model
 
             Replaceable = CheckIfReplaceable(this);
             Points = CalculatePoints(this);
-            //TODO some try catch code
-            //TODO adjust to screen size
             
             ImgString = $@"/Resources/{Name}.png";
 

@@ -48,7 +48,7 @@ namespace Hearts.Server
                 while (!endFlag)
                 {
 
-                    byte[] stringResponse = new byte[10240];
+                    byte[] stringResponse = new byte[15240];
 
                     await networkStream.ReadAsync(stringResponse, 0, (int)client.ReceiveBufferSize);
 
@@ -59,7 +59,9 @@ namespace Hearts.Server
                     {
                         try
                         {
-                            JToken.Parse(clientMsg); // if string isn't JSON throws an exception
+                            
+
+                            JToken.Parse(clientMsg); // if string isn't a valid JSON throws an exception
                             response = JsonConvert.DeserializeObject<Message>(clientMsg);
 
                             if (!Game.HeartsAllowed && response.HeartsAllowed)

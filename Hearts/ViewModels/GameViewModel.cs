@@ -9,12 +9,12 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using Hearts.Model;
 using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace Hearts.ViewModels
 {
     public class GameViewModel : ViewModelBase
     {
-        //Game instance
 
         public Player Stats;
 
@@ -22,7 +22,23 @@ namespace Hearts.ViewModels
 
         private bool heartsChanged = false;
 
-        Client clientInstance;
+        private Timer potTimer;
+
+
+        private int points;
+        public int Points
+        {
+            get
+            {
+                return points;
+            }
+            private set
+            {
+                Set<int>(() => Points, ref points, value);
+            }
+        }
+
+        private Client clientInstance;
         public Client ClientInstance
         {
             get
@@ -77,13 +93,40 @@ namespace Hearts.ViewModels
             }
         }
 
+
+        private string helpInfo;
+        public string HelpInfo
+        {
+            get
+            {
+                return helpInfo;
+            }
+            set
+            {
+                Set<string>(() => HelpInfo, ref helpInfo, value);
+            }
+        }
+
         public RelayCommand passCards { get; private set; }
         public RelayCommand sendCard { get; private set; }
         public RelayCommand<Card> selectCard { get; private set; }
 
         public GameViewModel()
         {
-            
+            potTimer = new Timer()
+            {
+                Interval = 2000
+            };
+
+            potTimer.Elapsed += (s, e) =>
+            {
+                
+                //Pot = new ObservableCollection<Card>();
+                potTimer.Stop();
+            };
+
+
+            HelpInfo = "Here you will see a game guide";
             Stats = new Player("");
             Pot = new ObservableCollection<Card>();
             Messages = new ObservableCollection<string>();
@@ -127,19 +170,20 @@ namespace Hearts.ViewModels
             switch (serverRequest.Request)
             {
                 case MessageType.CardRequest:
-                    Inform($"Server requested: {serverOrder.CardsRequested[0]}");
+                    Inform($"Server requested: {serverOrder.CardsRequested[0]}", true);
                     SendRequestedCard(serverOrder.CardsRequested[0]);
                     break;
                 case MessageType.ShowCards:
                     ShowCards(serverRequest);
                     break;
                 case MessageType.PassOn:
-                    Inform("Pass on");
+                    Inform("Now is your turn to pass on 3 cards");
                     break;
                 case MessageType.ShowPot:
-                    Inform($"Pot contains: {serverOrder.CardsRequested}");
+                    Inform($"Pot contains: {serverOrder.CardsRequested}", true);
                     ShowPot(serverOrder.CardsRequested);
-                    Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
+                    Points = serverOrder.PlayerStats.Points;
+                    //Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     break;
                 case MessageType.YouDeal:
                     Inform($"You deal now!");
@@ -148,10 +192,11 @@ namespace Hearts.ViewModels
                     Inform("Your turn now!");
                     break;
                 case MessageType.ShowStats:
+                    Points = serverOrder.PlayerStats.Points;
                     //Inform($"\nPunkty: {serverOrder.PlayerStats.Points}\n");
                     break;
                 case MessageType.Win:
-                    Inform("Brawo, wygrałeś!");
+                    Inform("You won the game!");
                     break;
             }
 
@@ -170,20 +215,13 @@ namespace Hearts.ViewModels
             Stats.Hand = hand;
             CardsInHand = new ObservableCollection<Card>(hand);
 
-            Inform("Odświeżono karty");
+            //Inform("Odświeżono karty");
             
         }
 
         public void ShowPot(IEnumerable<Card> pot)
         {
-            //List<string> names = new List<string>();
-
-            //foreach (Card c in pot)
-            //{
-            //    names.Add(c.Name);
-            //}
-            //Messages = new ObservableCollection<string>(names);
-
+            
             Pot = new ObservableCollection<Card>(pot);
         }
 
@@ -198,7 +236,7 @@ namespace Hearts.ViewModels
                     {
                         if (c.Suit != Suits.Hearts)
                         {
-                            Inform("Nie możesz jeszcze tego wyłożyć, gdyż posiadasz inne kolory a nikt wcześniej nie zagrał serca!");
+                            Inform("You can't put it yet because you have other suits and nobody had played hearts before!");
                             return false;
                         }
                         
@@ -279,7 +317,7 @@ namespace Hearts.ViewModels
                 }
                 else
                 {
-                    Inform("Musisz wybrać 3 karty!");
+                    Inform("You need to choose 3 cards!");
                 }
             }
         }
@@ -290,7 +328,7 @@ namespace Hearts.ViewModels
             if (Stats.SelectedCards.Count > 0 && CheckSelectedCard(Stats.SelectedCards[0]) && serverOrder != null)
             {
                 MessageType responseType = serverOrder.Request == MessageType.YouDeal ? MessageType.YouDeal : MessageType.YourTurn;
-                Inform($"Karta wysłana: {Stats.SelectedCards[0]}");
+                Inform($"Sent card: {Stats.SelectedCards[0].Name}", true);
                 Stats.Hand.Remove(Stats.SelectedCards[0]);
                 //TODO Check if sending playerStats doesn't spoil anything
                 Message toSend = new Message(responseType, Stats, Stats.SelectedCards[0])
@@ -301,9 +339,10 @@ namespace Hearts.ViewModels
                 clientInstance.SendData(toSend);
                 Stats.Hand.Remove(Stats.SelectedCards[0]);
                 CardsInHand = new ObservableCollection<Card>(Stats.Hand);
+                Stats.SelectedCards.Clear();
             }
             else
-                Inform("Zła karta!");
+                Inform("Wrong card!");
         }
 
         public void SendRequestedCard(Card requested)
@@ -312,7 +351,7 @@ namespace Hearts.ViewModels
             {
                 if (Stats.Hand[i].Equals(requested))
                 {
-                    Inform($"Posiadałeś: {requested.Name} więc zacząłeś grę!");
+                    Inform($"You owned: {requested.Name} so you started the game!");
                     clientInstance.SendData(new Message(MessageType.CardRequest, null, Stats.Hand[i]));
                     Stats.Hand.RemoveAt(i);
                     CardsInHand = new ObservableCollection<Card>(Stats.Hand);
@@ -350,24 +389,24 @@ namespace Hearts.ViewModels
         //TODO change PassOrSelect
         private void Select(Card toSelect)
         {
-            Inform("Select");
+            //Inform("Select");
             if (Stats.PassOrSelect)
             {
                 if (Stats.SelectedCards.Contains(toSelect))
                 {
                     Stats.SelectedCards.Remove(toSelect);
-                    Inform($"Usunięto {toSelect.ToString()}");
+                    Inform($"{toSelect.Name} was removed");
                 }
                 else if (!Stats.SelectedCards.Contains(toSelect) && Stats.SelectedCards.Count < 3)
                 {
                     Stats.SelectedCards.Add(toSelect);
-                    Inform($"Dodano {toSelect.ToString()}");
+                    Inform($"{toSelect.Name} was added");
                 }
                 else
                 {
                     Card lastOne = Stats.SelectedCards[Stats.SelectedCards.Count - 1];
                     Stats.SelectedCards[Stats.SelectedCards.Count - 1] = toSelect;
-                    Inform($"Wymieniono {lastOne} na {toSelect.ToString()}");
+                    Inform($"{lastOne.Name} was replaced by {toSelect.Name}");
                 }
 
             }
@@ -379,12 +418,19 @@ namespace Hearts.ViewModels
         }
 
 
-        private void Inform(string informMessage)
+        private void Inform(string informMessage, bool isServerMsg = false)
         {
             Console.WriteLine(informMessage);
-            List<string> msgs = Messages.ToList();
-            msgs.Add(informMessage);
-            Messages = new ObservableCollection<string>(msgs);
+
+            if (isServerMsg)
+            {
+                List<string> msgs = Messages.ToList();
+                msgs.Add(informMessage);
+                Messages = new ObservableCollection<string>(msgs);
+            }
+            else
+                HelpInfo = informMessage;
+
         }
         
     }
